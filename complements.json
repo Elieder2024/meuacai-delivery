@@ -1,0 +1,10 @@
+[
+  { "id": "comp_1", "name": "🍌 Banana Fatiada", "desc": "Banana prata novinha fatiada na hora" },
+  { "id": "comp_2", "name": "🍓 Morango Fresco", "desc": "Morangos frescos fatiados" },
+  { "id": "comp_3", "name": "🥛 Leite em Pó (Ninho)", "desc": "Bastante leite em pó polvilhado" },
+  { "id": "comp_4", "name": "🌾 Granola Crocante", "desc": "Granola artesanal com mel e castanhas" },
+  { "id": "comp_5", "name": "🍯 Leite Condensado", "desc": "Leite condensado cremoso Moça" },
+  { "id": "comp_6", "name": "🍯 Mel Puro de Abelha", "desc": "Mel 100% natural" },
+  { "id": "comp_7", "name": "🥥 Coco Ralado Fino", "desc": "Coco ralado seco em flocos" },
+  { "id": "comp_8", "name": "🍇 Uva Passa", "desc": "Uva passa preta selecionada" }
+]
