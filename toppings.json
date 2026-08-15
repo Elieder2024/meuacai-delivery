@@ -1,0 +1,10 @@
+[
+  { "id": "top_1", "name": "🌰 Nutella Original (Porção)", "price": 4.50, "icon": "🌰" },
+  { "id": "top_2", "name": "🥛 Creme de Ninho Caseiro", "price": 3.50, "icon": "🥛" },
+  { "id": "top_3", "name": "🥜 Paçoca Moída Crocante", "price": 2.50, "icon": "🥜" },
+  { "id": "top_4", "name": "🍫 KitKat Picado", "price": 3.50, "icon": "🍫" },
+  { "id": "top_5", "name": "🔴 M&Ms Coloridos", "price": 3.00, "icon": "🔴" },
+  { "id": "top_6", "name": "🍫 Bis Crocante (Ao Leite)", "price": 3.00, "icon": "🍫" },
+  { "id": "top_7", "name": "🟤 Gotas de Chocolate Nobre", "price": 3.00, "icon": "🟤" },
+  { "id": "top_8", "name": "🌰 Creme de Ovomaltine", "price": 4.00, "icon": "🌰" }
+]
