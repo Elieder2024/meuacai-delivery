@@ -1,0 +1,6 @@
+[
+  { "id": "rew_1", "name": "🌰 Adicional de Nutella Grátis", "points": 40, "desc": "Porção extra de Nutella Original no seu açaí", "type": "extra", "value": 4.50, "icon": "🌰" },
+  { "id": "rew_2", "name": "🥤 Refrigerante ou Água Grátis", "points": 50, "desc": "Qualquer bebida lata do cardápio", "type": "drink", "value": 5.00, "icon": "🥤" },
+  { "id": "rew_3", "name": "💰 Cupom de R$ 10,00 de Desconto", "points": 100, "desc": "Desconto de R$ 10,00 no total do pedido", "type": "discount", "value": 10.00, "icon": "🏷️" },
+  { "id": "rew_4", "name": "🍧 Copo 300ml de Açaí Grátis", "points": 140, "desc": "1x Copo 300ml com 3 acompanhamentos à escolha", "type": "acai", "value": 14.00, "icon": "🍧" }
+]
