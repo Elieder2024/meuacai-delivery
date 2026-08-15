@@ -1,0 +1,13 @@
+[
+  {
+    "id": "ACAI-101",
+    "clientName": "Cliente Centro BC",
+    "clientPhone": "47999998888",
+    "address": "Av. Brasil, 1200 - Centro, Balneário Camboriú",
+    "items": "1x Copo 500ml (Açaí Tradicional, Banana, Morango, Leite Ninho, Nutella Original)",
+    "total": 22.50,
+    "paymentMethod": "PIX",
+    "status": "EM_PREPARO",
+    "date": "Hoje, 14:30"
+  }
+]
