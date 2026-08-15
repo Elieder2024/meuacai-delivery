@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MeuAçai - Açaí & Sobremesas em Balneário Camboriú</title>
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="styles.css?v=1.0" />
+</head>
+<body>
+
+  <!-- MOBILE APP CONTAINER FRAME -->
+  <div class="mobile-app-shell">
+
+    <!-- RESTAURANT BRANDED HEADER -->
+    <header class="app-header brand-header">
+      <div class="brand-title-group">
+        <div class="brand-logo-circle">
+          🍧
+        </div>
+        <div class="brand-name-box">
+          <h1>MEUAÇAI</h1>
+          <p><i class="fa-solid fa-location-dot text-yellow"></i> Balneário Camboriú • SC</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- DELIVERY / PICKUP TOGGLE BAR -->
+    <section class="fulfillment-bar">
+      <div class="fulfillment-toggle">
+        <button class="f-btn active" id="f-btn-delivery" onclick="setFulfillmentMode('delivery')">
+          <i class="fa-solid fa-motorcycle"></i> Entrega (Delivery)
+        </button>
+        <button class="f-btn" id="f-btn-pickup" onclick="setFulfillmentMode('pickup')">
+          <i class="fa-solid fa-store"></i> Retirar na Loja
+        </button>
+      </div>
+      <div class="address-subbar">
+        <i class="fa-solid fa-map-pin text-purple"></i>
+        <span id="delivery-address-display">Entregar em: Centro, Balneário Camboriú (20-30 min)</span>
+      </div>
+    </section>
+
+    <!-- BANNER PROMO & CARDÁPIO DO DIA -->
+    <section class="today-menu-banner">
+      <div class="banner-card">
+        <span class="banner-badge">O MELHOR AÇAÍ DE BC</span>
+        <h2>Açaí Puro & Cremoso 🍧💜</h2>
+        <p>Monte seu copo com frutas frescas e coberturas irresistíveis!</p>
+        <div class="banner-features">
+          <span><i class="fa-solid fa-circle-check text-yellow"></i> Complementos grátis à sua escolha</span>
+          <span><i class="fa-solid fa-bolt text-yellow"></i> Entrega geladinha e rápida</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK CATEGORY NAV TABS -->
+    <section class="categories-section">
+      <div class="categories-scroll" id="categories-container">
+        <button class="cat-pill active" data-cat="copos" onclick="scrollToSection('sec-copos', this)">
+          <span class="cat-emoji">🍧</span>
+          <span>Montar Copos</span>
+        </button>
+        <button class="cat-pill" data-cat="bebidas" onclick="scrollToSection('sec-bebidas', this)">
+          <span class="cat-emoji">🥤</span>
+          <span>Bebidas & Sucos</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- MAIN APP CONTENT -->
+    <main class="feed-section">
+
+      <!-- SECTION 1: ESCOLHA O TAMANHO DO AÇAÍ -->
+      <section class="catalog-group" id="sec-copos">
+        <div class="group-header">
+          <h3>🍧 1. Escolha o Tamanho do Açaí</h3>
+          <p>Todos acompanham Açaí Puríssimo + Complementos Grátis!</p>
+        </div>
+
+        <div class="acai-sizes-grid">
+          
+          <!-- COPO 300ML -->
+          <div class="acai-card" onclick="openAcaiBuilderModal('copo300', 'Copo 300ml', 14.00)">
+            <div class="acai-badge">INDIVIDUAL</div>
+            <div class="acai-img">
+              <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400" alt="Açaí 300ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Copo 300ml</h4>
+              <p>Ideal para 1 pessoa. Escolha até 3 acompanhamentos + 1 cobertura.</p>
+              <div class="acai-price-row">
+                <span class="acai-price" id="card-price-copo300">R$ 14,00</span>
+                <button type="button" class="btn-select-acai" onclick="openAcaiBuilderModal('copo300', 'Copo 300ml', 14.00)"><i class="fa-solid fa-plus"></i> Montar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- COPO 500ML -->
+          <div class="acai-card popular-card" onclick="openAcaiBuilderModal('copo500', 'Copo 500ml', 18.00)">
+            <div class="acai-badge badge-popular">🔥 O MAIS PEDIDO</div>
+            <div class="acai-img">
+              <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400" alt="Açaí 500ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Copo 500ml</h4>
+              <p>Tamanho padrão caprichado (500ml). Escolha até 4 acompanhamentos + 2 coberturas.</p>
+              <div class="acai-price-row">
+                <span class="acai-price" id="card-price-copo500">R$ 18,00</span>
+                <button type="button" class="btn-select-acai" onclick="openAcaiBuilderModal('copo500', 'Copo 500ml', 18.00)"><i class="fa-solid fa-plus"></i> Montar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- COPO 700ML -->
+          <div class="acai-card" onclick="openAcaiBuilderModal('copo700', 'Copo 700ml', 24.00)">
+            <div class="acai-badge">REFORÇADO</div>
+            <div class="acai-img">
+              <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400" alt="Açaí 700ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Copo 700ml</h4>
+              <p>Para quem ama açaí de verdade (700ml). Escolha até 5 acompanhamentos + 2 coberturas.</p>
+              <div class="acai-price-row">
+                <span class="acai-price" id="card-price-copo700">R$ 24,00</span>
+                <button type="button" class="btn-select-acai" onclick="openAcaiBuilderModal('copo700', 'Copo 700ml', 24.00)"><i class="fa-solid fa-plus"></i> Montar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TIGELA 1 LITRO -->
+          <div class="acai-card" onclick="openAcaiBuilderModal('tigela1000', 'Tigela Família 1 Litro', 32.00)">
+            <div class="acai-badge">FAMÍLIA</div>
+            <div class="acai-img">
+              <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400" alt="Tigela 1 Litro" />
+            </div>
+            <div class="acai-details">
+              <h4>Tigela Família (1 Litro)</h4>
+              <p>Ideal para dividir com a galera (1.000ml). Acompanhamentos à vontade!</p>
+              <div class="acai-price-row">
+                <span class="acai-price" id="card-price-tigela1000">R$ 32,00</span>
+                <button type="button" class="btn-select-acai" onclick="openAcaiBuilderModal('tigela1000', 'Tigela Família 1 Litro', 32.00)"><i class="fa-solid fa-plus"></i> Montar</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 2: BEBIDAS & SUCOS -->
+      <section class="catalog-group" id="sec-bebidas">
+        <div class="group-header">
+          <h3>🥤 2. Bebidas & Sucos Naturais</h3>
+          <p>Para acompanhar o seu açaí geladinho</p>
+        </div>
+
+        <div id="drinks-container">
+          <!-- JS Rendered Drinks -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- STICKY FLOATING CART BAR -->
+    <div class="sticky-cart-bar" id="sticky-cart-bar" style="display: none;" onclick="toggleCartDrawer()">
+      <div class="sticky-cart-info">
+        <div class="sticky-cart-count-badge" id="sticky-cart-count">0</div>
+        <div class="sticky-cart-text">
+          <span>Ver Meu Pedido</span>
+          <small id="sticky-cart-items-preview">Nenhum item</small>
+        </div>
+      </div>
+      <div style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 900;" id="sticky-cart-total">
+        R$ 0,00
+      </div>
+    </div>
+
+    <!-- BOTTOM APP NAVIGATION BAR -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="scrollToSection('sec-copos')">
+        <i class="fa-solid fa-ice-cream"></i>
+        <span>Cardápio</span>
+      </button>
+      <button class="nav-item nav-item-cart" onclick="toggleCartDrawer()">
+        <div class="cart-icon-box">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span class="nav-cart-badge" id="bottom-cart-badge">0</span>
+        </div>
+        <span>Meu Pedido</span>
+      </button>
+      <button class="nav-item" onclick="openLoyaltyModal()">
+        <i class="fa-solid fa-crown text-purple"></i>
+        <span>Fidelidade</span>
+      </button>
+      <button class="nav-item" onclick="openMyOrdersModal()">
+        <i class="fa-solid fa-receipt"></i>
+        <span>Meus Pedidos</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- MODAL: PROGRAMA DE FIDELIDADE (CUPOM / PONTOS) -->
+  <div class="modal-overlay" id="modal-loyalty">
+    <div class="modal-content" style="height: 100%; max-height: 100%; border-radius: 0;">
+      <div class="modal-header bg-purple">
+        <div>
+          <h3>🎁 Clube Fidelidade MeuAçai</h3>
+          <span style="font-size: 0.8rem; opacity: 0.9;">R$ 1,00 gasto = 1 Ponto de Recompensa!</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeLoyaltyModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="builder-body">
+        
+        <!-- STATE A: NÃO LOGADO (CADASTRO / LOGIN) -->
+        <div id="loyalty-auth-container">
+          <div style="text-align: center; background: #faf5ff; border: 1px dashed #c084fc; padding: 1.25rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+            <span style="font-size: 2.5rem;">👑</span>
+            <h4 style="font-size: 1.1rem; color: var(--color-dark); margin-top: 0.3rem;">Junte pontos e troque por açaí e adicionais grátis!</h4>
+            <p style="font-size: 0.8rem; color: var(--color-gray); margin-top: 0.2rem;">Cadastre seu WhatsApp em 30 segundos e ganhe <strong>20 pontos de bônus</strong> na hora!</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+            <button type="button" class="btn btn-secondary btn-full active" id="btn-loyalty-tab-login" onclick="switchLoyaltyAuthTab('login')">Entrar na Minha Conta</button>
+            <button type="button" class="btn btn-secondary btn-full" id="btn-loyalty-tab-reg" onclick="switchLoyaltyAuthTab('reg')">Criar Nova Conta</button>
+          </div>
+
+          <!-- FORM: LOGIN -->
+          <form id="form-loyalty-login" onsubmit="handleLoyaltyLogin(event)">
+            <div class="form-group margin-top-sm">
+              <label for="loyalty-login-phone">Seu WhatsApp (Celular)</label>
+              <input type="tel" id="loyalty-login-phone" placeholder="(47) 99999-8888" required />
+            </div>
+            <div class="form-group margin-top-sm">
+              <label for="loyalty-login-pass">Sua Senha</label>
+              <input type="password" id="loyalty-login-pass" placeholder="••••••••" required />
+            </div>
+            <button type="submit" class="btn btn-purple btn-full margin-top-md">
+              <i class="fa-solid fa-right-to-bracket"></i> Entrar no Clube Fidelidade
+            </button>
+          </form>
+
+          <!-- FORM: CADASTRO -->
+          <form id="form-loyalty-register" onsubmit="handleLoyaltyRegister(event)" style="display: none;">
+            <div class="form-group margin-top-sm">
+              <label for="loyalty-reg-name">Seu Nome Completo</label>
+              <input type="text" id="loyalty-reg-name" placeholder="Ex: Maria Silva" required />
+            </div>
+            <div class="form-group margin-top-sm">
+              <label for="loyalty-reg-phone">Seu WhatsApp (DDD + Número)</label>
+              <input type="tel" id="loyalty-reg-phone" placeholder="(47) 99999-8888" required />
+            </div>
+            <div class="form-group margin-top-sm">
+              <label for="loyalty-reg-pass">Crie uma Senha Fácil</label>
+              <input type="password" id="loyalty-reg-pass" placeholder="Mínimo 3 digitos" required />
+            </div>
+            <button type="submit" class="btn btn-purple btn-full margin-top-md">
+              <i class="fa-solid fa-user-plus"></i> Criar Minha Conta & Ganhar 20 Pontos!
+            </button>
+          </form>
+        </div>
+
+        <!-- STATE B: LOGADO (CARTÃO DE PONTOS & CATÁLOGO DE PRÊMIOS) -->
+        <div id="loyalty-user-container" style="display: none;">
+          <div style="background: linear-gradient(135deg, #7e22ce 0%, #581c87 100%); color: #ffffff; padding: 1.25rem; border-radius: var(--radius-md); box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">CARTÃO FIDELIDADE MEUAÇAI</span>
+                <h3 id="loyalty-user-name" style="font-size: 1.2rem; font-weight: 800; font-family: var(--font-heading);">Cliente</h3>
+              </div>
+              <button onclick="handleLoyaltyLogout()" style="background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 0.3rem 0.6rem; border-radius: 12px; font-size: 0.7rem; font-weight: 700; cursor: pointer;">Sair</button>
+            </div>
+
+            <div style="margin-top: 1rem; display: flex; align-items: baseline; gap: 0.4rem;">
+              <span id="loyalty-user-points" style="font-size: 2.2rem; font-weight: 900; font-family: var(--font-heading); color: var(--color-accent);">0</span>
+              <span style="font-size: 0.9rem; font-weight: 700;">Pontos Acumulados</span>
+            </div>
+            <small style="display: block; opacity: 0.85; font-size: 0.75rem; margin-top: 0.2rem;">Ganhe +1 ponto a cada R$ 1,00 em pedidos no app!</small>
+          </div>
+
+          <h4 style="font-size: 1rem; color: var(--color-dark); margin-bottom: 0.75rem;"><i class="fa-solid fa-gift text-purple"></i> Resgatar Prêmios com Seus Pontos:</h4>
+
+          <div id="rewards-catalog-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <!-- JS Rendered Rewards -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MONTAR AÇAÍ PASSO A PASSO -->
+  <div class="modal-overlay" id="modal-acai-builder">
+    <div class="modal-content" style="height: 100%; max-height: 100%; border-radius: 0;">
+      <div class="modal-header bg-purple">
+        <div>
+          <h3 id="builder-modal-title">Montar Copo 500ml</h3>
+          <span style="font-size: 0.8rem; opacity: 0.9;" id="builder-modal-price">Valor Base: R$ 18,00</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeAcaiBuilderModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="builder-body">
+        
+        <!-- PASSO 1: COMPLEMENTOS GRÁTIS -->
+        <div class="catalog-group">
+          <h4 class="step-header">1. Acompanhamentos Grátis <span class="text-purple">(Escolha à vontade)</span></h4>
+          <div class="options-group" id="complements-options-container">
+            <!-- JS Rendered Complements -->
+          </div>
+        </div>
+
+        <!-- PASSO 2: COBERTURAS E ADICIONAIS EXTRAS -->
+        <div class="catalog-group margin-top-md">
+          <h4 class="step-header">2. Coberturas Especialidades & Extras <span style="font-size: 0.75rem; font-weight: 500; color: var(--color-gray);">(Opcional)</span></h4>
+          <div class="options-group" id="toppings-options-container">
+            <!-- JS Rendered Toppings -->
+          </div>
+        </div>
+
+        <!-- PASSO 3: OBSERVAÇÕES -->
+        <div class="catalog-group margin-top-md">
+          <h4 class="step-header">3. Observações Especiais</h4>
+          <div class="form-group">
+            <textarea id="acai-notes" rows="2" placeholder="Ex: Capricha na Nutella no meio do copo..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="builder-footer">
+        <div>
+          <small style="font-size: 0.72rem; color: var(--color-gray); display: block;">VALOR TOTAL:</small>
+          <strong id="builder-total-price" style="font-size: 1.25rem; color: var(--color-primary); font-family: var(--font-heading);">R$ 18,00</strong>
+        </div>
+        <button class="btn btn-purple" onclick="addAcaiToCartFromBuilder()">
+          <i class="fa-solid fa-cart-plus"></i> Adicionar ao Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER: CARRO / MEU PEDIDO -->
+  <div class="drawer-overlay" id="cart-drawer-overlay" onclick="toggleCartDrawer()"></div>
+  <aside class="modal-content" id="cart-drawer" style="position: fixed; right: 0; top: 0; bottom: 0; height: 100%; max-width: 420px; border-radius: 0; transform: translateX(100%); transition: transform 0.3s ease; z-index: 105;">
+    <div class="modal-header bg-purple">
+      <h3><i class="fa-solid fa-basket-shopping"></i> Seu Pedido de Açaí</h3>
+      <button class="btn-close-modal" onclick="toggleCartDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="builder-body">
+      
+      <!-- Step 1: Cart Items List -->
+      <div id="cart-step-items">
+        <div id="cart-items-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <!-- JS Rendered Cart Items -->
+        </div>
+
+        <div class="form-group margin-top-md">
+          <label for="checkout-address-input"><i class="fa-solid fa-location-dot text-purple"></i> Endereço Completo para Entrega em BC</label>
+          <input type="text" id="checkout-address-input" placeholder="Rua / Av., Número, Ap., Ponto de ref." />
+        </div>
+
+        <div class="form-group margin-top-sm">
+          <label for="checkout-bairro-bc"><i class="fa-solid fa-map text-purple"></i> Selecione seu Bairro (Balneário Camboriú)</label>
+          <select id="checkout-bairro-bc" onchange="updateDeliveryFeeBC()">
+            <option value="Centro" data-fee="3.00" selected>Centro - Taxa R$ 3,00</option>
+            <option value="Pioneiros" data-fee="4.00">Pioneiros - Taxa R$ 4,00</option>
+            <option value="Nações" data-fee="4.00">Nações - Taxa R$ 4,00</option>
+            <option value="Estados" data-fee="4.00">Estados - Taxa R$ 4,00</option>
+            <option value="Ariribá" data-fee="5.00">Ariribá - Taxa R$ 5,00</option>
+            <option value="Vila Real" data-fee="5.00">Vila Real - Taxa R$ 5,00</option>
+            <option value="Municípios" data-fee="5.00">Municípios - Taxa R$ 5,00</option>
+            <option value="I struggle / Barra" data-fee="6.00">Barra / Barra Sul - Taxa R$ 6,00</option>
+            <option value="Praia dos Amores" data-fee="7.00">Praia dos Amores - Taxa R$ 7,00</option>
+          </select>
+        </div>
+
+        <div class="form-group margin-top-sm">
+          <label for="checkout-payment-method"><i class="fa-solid fa-wallet text-purple"></i> Forma de Pagamento</label>
+          <select id="checkout-payment-method">
+            <option value="pix">⚡ PIX (Aprovação Instantânea)</option>
+            <option value="card">💳 Cartão de Crédito/Débito na Entrega</option>
+            <option value="cash">💵 Dinheiro (Troco na Entrega)</option>
+          </select>
+        </div>
+
+        <div style="background: #faf5ff; border: 1px solid var(--border-color); padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+            <span>Subtotal:</span>
+            <span id="cart-subtotal">R$ 0,00</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.3rem;">
+            <span>Taxa de Entrega (BC):</span>
+            <span id="cart-fee-display">R$ 3,00</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; margin-top: 0.5rem; border-top: 1px dashed var(--border-color); padding-top: 0.5rem;">
+            <span>Total a Pagar:</span>
+            <strong id="cart-total-price" class="text-purple">R$ 0,00</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: PIX Confirmation -->
+      <div id="cart-step-pix" style="display: none;">
+        <div style="text-align: center; background: #faf5ff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: var(--radius-md);">
+          <div style="font-size: 0.8rem; font-weight: 900; color: var(--color-primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-qrcode"></i> CHAVE PIX - MEUAÇAI</div>
+          <p style="font-size: 0.8rem; color: var(--color-gray);">Escaneie o QR Code abaixo ou copie a chave para pagar no seu banco:</p>
+          
+          <div style="margin: 1rem 0;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126580014br.gov.bcb.pix0136meuacai-bc-santa-catarina-pix" alt="QR Code PIX MeuAçai" style="border-radius: 12px; border: 1px solid #ddd;" />
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <input type="text" readonly id="pix-copy-input" value="00020126580014br.gov.bcb.pix0136meuacai-pix-chave-99120" style="flex: 1; font-size: 0.75rem;" />
+            <button class="btn btn-secondary" onclick="copyPixCode()"><i class="fa-solid fa-copy"></i> Copiar</button>
+          </div>
+
+          <button class="btn btn-purple btn-full margin-top-md" onclick="confirmPaymentAndSendToKitchen()">
+            <i class="fa-solid fa-check-circle"></i> Enviar Pedido para a Loja!
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="builder-footer" id="cart-footer-actions">
+      <button class="btn btn-secondary" onclick="clearCart()">Limpar</button>
+      <button class="btn btn-purple btn-full" onclick="proceedToCheckoutPayment()">
+        <i class="fa-solid fa-arrow-right"></i> Finalizar Pedido
+      </button>
+    </div>
+  </aside>
+
+  <!-- MODAL: MEUS PEDIDOS & ACOMPANHAMENTO -->
+  <div class="modal-overlay" id="modal-my-orders">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header bg-dark">
+        <h3><i class="fa-solid fa-receipt text-purple"></i> Acompanhe seu Pedido de Açaí</h3>
+        <button class="btn-close-modal" onclick="closeMyOrdersModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="builder-body">
+        <div id="user-orders-tracker-list">
+          <!-- JS Rendered Orders -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript -->
+  <script src="app.js?v=1.0"></script>
+</body>
+</html>
