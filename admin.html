@@ -100,7 +100,11 @@
             <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--color-dark);">Pedidos em Tempo Real</h3>
             <p style="font-size: 0.8rem; color: var(--color-gray);">Acompanhe e avance a montagem dos copos de açaí para entrega em Balneário Camboriú</p>
           </div>
-          <div style="display: flex; gap: 0.5rem;">
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 700; background: #fdf4ff; padding: 0.4rem 0.8rem; border-radius: 20px; border: 1px solid #f5d0fe; cursor: pointer;">
+              <input type="checkbox" id="auto-print-toggle" onchange="toggleAutoPrintPreference(this)" />
+              <span>🖨️ Impressão Automática</span>
+            </label>
             <button class="btn btn-secondary btn-sm" onclick="playNotificationSound('new_order')"><i class="fa-solid fa-volume-high text-purple"></i> Testar Som</button>
             <button class="btn btn-secondary btn-sm" onclick="renderAdminPageOrders()"><i class="fa-solid fa-rotate"></i> Atualizar Pedidos</button>
           </div>
@@ -436,6 +440,27 @@
     </div>
   </div>
 
+  <!-- MODAL: DETALHES DO PEDIDO / CUPOM DA LOJA -->
+  <div class="modal-overlay" id="modal-admin-order-details">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header bg-purple">
+        <h3><i class="fa-solid fa-receipt"></i> Detalhes do Pedido - Loja</h3>
+        <button class="btn-close-modal" onclick="closeAdminOrderDetailsModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="builder-body" id="admin-order-details-body" style="padding: 1.25rem;">
+        <!-- JS Rendered Details -->
+      </div>
+      <div class="builder-footer" style="flex-direction: column; gap: 0.5rem;">
+        <button class="btn btn-purple btn-full" onclick="printAdminCurrentOrderTicket()">
+          <i class="fa-solid fa-print"></i> Imprimir Cupom Não Fiscal
+        </button>
+        <button class="btn btn-secondary btn-full" onclick="sendAdminCurrentOrderWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> Enviar Mensagem WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
@@ -542,6 +567,9 @@
           if (parsed.length > lastOrdersCount && lastOrdersCount !== 0) {
             showToast(`🔔 NOVO PEDIDO DE AÇAÍ CHEGOU NA LOJA! (${parsed[0].id})`, 'success');
             playNotificationSound('new_order');
+            if (isAutoPrintEnabled()) {
+              printAdminOrderTicketById(parsed[0].id);
+            }
           }
           lastOrdersCount = parsed.length;
           adminState.orders = parsed;
@@ -627,7 +655,7 @@
         return `
           <tr>
             <td>
-              <strong style="color: var(--color-primary);">${o.id}</strong><br/>
+              <strong style="color: var(--color-primary); cursor: pointer;" onclick="openAdminOrderDetailsModal('${o.id}')" title="Clique para ver detalhes">${o.id}</strong><br/>
               <small style="color: var(--color-gray);">${o.date || ''}</small>
             </td>
             <td>
@@ -635,21 +663,31 @@
               <small style="color: var(--color-gray);">${o.address}</small><br/>
               <small style="color: var(--color-primary); font-weight: 700;">📱 ${o.clientPhone || 'Não informado'}</small>
             </td>
-            <td><span style="font-size: 0.82rem; font-weight: 600;">${o.items}</span></td>
+            <td>
+              <div style="font-size: 0.82rem; font-weight: 600; max-height: 80px; overflow-y: auto;">${o.items}</div>
+              <button class="btn btn-secondary btn-sm margin-top-sm" style="font-size: 0.72rem; padding: 2px 8px;" onclick="openAdminOrderDetailsModal('${o.id}')">
+                <i class="fa-solid fa-eye text-purple"></i> Ver Completo
+              </button>
+            </td>
             <td><strong style="color: var(--color-primary);">R$ ${priceNum.toFixed(2).replace('.', ',')}</strong></td>
             <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
             <td>
-              ${o.status === 'EM_PREPARO' ? `
-                <button class="btn btn-secondary btn-sm" onclick="advanceOrderStatusAdmin('${o.id}', 'SAIU_ENTREGA')">
-                  🛵 Enviar p/ Entrega
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <button class="btn btn-secondary btn-sm" style="font-size: 0.75rem;" onclick="openAdminOrderDetailsModal('${o.id}')">
+                  <i class="fa-solid fa-print text-purple"></i> Ver / Imprimir
                 </button>
-              ` : o.status === 'SAIU_ENTREGA' ? `
-                <button class="btn btn-primary btn-sm" onclick="advanceOrderStatusAdmin('${o.id}', 'ENTREGUE')">
-                  🎉 Marcar Entregue
-                </button>
-              ` : `
-                <span style="color: #166534; font-weight: 800; font-size: 0.8rem;">✓ Concluído</span>
-              `}
+                ${o.status === 'EM_PREPARO' ? `
+                  <button class="btn btn-secondary btn-sm" onclick="advanceOrderStatusAdmin('${o.id}', 'SAIU_ENTREGA')">
+                    🛵 Enviar p/ Entrega
+                  </button>
+                ` : o.status === 'SAIU_ENTREGA' ? `
+                  <button class="btn btn-primary btn-sm" onclick="advanceOrderStatusAdmin('${o.id}', 'ENTREGUE')">
+                    🎉 Marcar Entregue
+                  </button>
+                ` : `
+                  <span style="color: #166534; font-weight: 800; font-size: 0.8rem; text-align: center;">✓ Concluído</span>
+                `}
+              </div>
             </td>
           </tr>
         `;
@@ -1128,6 +1166,149 @@
         printWin.close();
       }, 250);
     }
+
+    let currentAdminSelectedOrder = null;
+
+    function isAutoPrintEnabled() {
+      return localStorage.getItem('auto_print_enabled') === 'true';
+    }
+
+    function toggleAutoPrintPreference(chk) {
+      localStorage.setItem('auto_print_enabled', chk.checked ? 'true' : 'false');
+      showToast(chk.checked ? '🖨️ Impressão Automática ATIVADA!' : 'Impressão Automática Desativada.', 'info');
+    }
+
+    function openAdminOrderDetailsModal(orderId) {
+      const order = adminState.orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      currentAdminSelectedOrder = order;
+      const body = document.getElementById('admin-order-details-body');
+      if (!body) return;
+
+      const priceNum = parseFloat(order.total) || 0;
+
+      body.innerHTML = `
+        <div id="admin-printable-ticket" style="background: #ffffff; border: 2px dashed #cbd5e1; padding: 1.25rem; border-radius: var(--radius-sm); font-family: 'Courier New', Courier, monospace; color: #0f172a;">
+          <div style="text-align: center; border-bottom: 2px dashed #94a3b8; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 900; margin-bottom: 2px;">🍧 MEUAÇAI - COMPROVANTE LOJA</h3>
+            <p style="font-size: 0.75rem;">Balneário Camboriú - SC</p>
+          </div>
+
+          <div style="font-size: 0.82rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+            <div><strong>PEDIDO Nº:</strong> <span style="font-size: 1.1rem; font-weight: 900; color: #7e22ce;">${order.id}</span></div>
+            <div><strong>DATA/HORA:</strong> ${order.date || 'Hoje'}</div>
+            <div><strong>STATUS:</strong> <span style="font-weight: 800; color: #7e22ce;">${order.status}</span></div>
+          </div>
+
+          <div style="font-size: 0.82rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+            <div><strong>CLIENTE:</strong> ${order.clientName || 'Cliente'}</div>
+            <div><strong>TELEFONE:</strong> 📱 ${order.clientPhone || 'Não informado'}</div>
+            <div><strong>ENDEREÇO:</strong> 📍 ${order.address}</div>
+          </div>
+
+          <div style="font-size: 0.82rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+            <div style="font-weight: 900; margin-bottom: 6px; font-size: 0.9rem; color: #581c87;">📋 ITENS & ACOMPANHAMENTOS:</div>
+            <div style="white-space: pre-wrap; font-size: 0.82rem; line-height: 1.5; background: #fdf4ff; padding: 0.75rem; border-radius: 6px; border: 1px solid #f5d0fe; font-family: sans-serif;">${order.items}</div>
+          </div>
+
+          <div style="font-size: 0.9rem; font-weight: 900; display: flex; justify-content: space-between; border-bottom: 2px dashed #94a3b8; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+            <span>FORMA DE PAGO: ${order.paymentMethod || 'PIX'}</span>
+            <span style="color: #7e22ce; font-size: 1.1rem;">TOTAL: R$ ${priceNum.toFixed(2).replace('.', ',')}</span>
+          </div>
+
+          <div style="text-align: center; font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">
+            <span>MEUAÇAI • Pedido de Balneário Camboriú</span>
+          </div>
+        </div>
+      `;
+
+      const modal = document.getElementById('modal-admin-order-details');
+      if (modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeAdminOrderDetailsModal() {
+      const modal = document.getElementById('modal-admin-order-details');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
+    }
+
+    function printAdminCurrentOrderTicket() {
+      if (!currentAdminSelectedOrder) return;
+      printAdminOrderTicketById(currentAdminSelectedOrder.id);
+    }
+
+    function printAdminOrderTicketById(orderId) {
+      const order = adminState.orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const priceNum = parseFloat(order.total) || 0;
+
+      const printWin = window.open('', '', 'width=420,height=650');
+      printWin.document.write(`
+        <html>
+          <head>
+            <title>Cupom Loja - \${order.id}</title>
+            <style>
+              body { font-family: monospace; padding: 12px; margin: 0; color: #000; }
+              @media print { @page { margin: 0; size: auto; } }
+            </style>
+          </head>
+          <body>
+            <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 8px; margin-bottom: 8px;">
+              <h3 style="margin: 0; font-size: 16px;">🍧 MEUAÇAI - VIA COZINHA</h3>
+              <p style="margin: 2px 0; font-size: 11px;">Balneário Camboriú - SC</p>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 8px;">
+              <div><b>PEDIDO Nº: \${order.id}</b></div>
+              <div>Data/Hora: \${order.date || 'Hoje'}</div>
+              <div>Cliente: \${order.clientName || 'Cliente'}</div>
+              <div>Tel: \${order.clientPhone || 'Não informado'}</div>
+              <div>Endereço: \${order.address}</div>
+            </div>
+            <div style="font-size: 12px; border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 8px 0; margin-bottom: 8px;">
+              <b>DETALHES DO PEDIDO:</b><br/>
+              <p style="white-space: pre-wrap; font-family: sans-serif; font-size: 12px; margin: 4px 0;">\${order.items}</p>
+            </div>
+            <div style="font-size: 13px; font-weight: bold;">
+              PAGAMENTO: \${order.paymentMethod || 'PIX'}<br/>
+              TOTAL PAGO: R$ \${priceNum.toFixed(2).replace('.', ',')}
+            </div>
+          </body>
+        </html>
+      `);
+      printWin.document.close();
+      printWin.focus();
+      setTimeout(() => {
+        printWin.print();
+        printWin.close();
+      }, 300);
+    }
+
+    function sendAdminCurrentOrderWhatsApp() {
+      if (!currentAdminSelectedOrder) return;
+      const o = currentAdminSelectedOrder;
+      const priceNum = parseFloat(o.total) || 0;
+
+      const msg = `*🍧 MEUAÇAI - BALNEÁRIO CAMBORIÚ*%0A` +
+        `Olá \${o.clientName}! Seu pedido *\${o.id}* no valor de R$ \${priceNum.toFixed(2).replace('.', ',')} está em preparo com carinho! 🍧💜`;
+
+      const phone = o.clientPhone ? o.clientPhone.replace(/\D/g, '') : '5547999998888';
+      window.open(`https://api.whatsapp.com/send?phone=\${phone}&text=\${msg}`, '_blank');
+    }
+
+    // Set auto-print toggle checkbox state on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const toggle = document.getElementById('auto-print-toggle');
+        if (toggle) toggle.checked = isAutoPrintEnabled();
+      }, 500);
+    });
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
