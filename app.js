@@ -167,34 +167,58 @@ function openAcaiBuilderModal(key, title, fallbackPrice) {
     if (titleEl) titleEl.innerText = `Montar ${title}`;
     if (priceEl) priceEl.innerText = `Valor Base: R$ ${basePrice.toFixed(2).replace('.', ',')}`;
 
-    // Populate complements (Até 3 grátis! Excesso: + R$ 2,00 cada)
+    // Populate complements (Livre - Nada marcado por padrão)
     const compContainer = document.getElementById('complements-options-container');
     if (compContainer && state.complements && state.complements.length) {
-      compContainer.innerHTML = state.complements.map((c, idx) => `
+      let compsHtml = `
+        <label class="checkbox-option" style="background: #f8fafc; border-color: #cbd5e1;">
+          <input type="checkbox" id="chk-no-complement" onchange="toggleNoComplement(this)" />
+          <div class="radio-content">
+            <strong>❌ Sem Acompanhamentos</strong>
+            <small>Desejo apenas o açaí puro no copo</small>
+          </div>
+        </label>
+      `;
+
+      compsHtml += state.complements.map(c => `
         <label class="checkbox-option">
-          <input type="checkbox" name="acai-complement" value="${c.name}" ${idx < 3 ? 'checked' : ''} onchange="calcBuilderTotal()" />
+          <input type="checkbox" name="acai-complement" value="${c.name}" onchange="handleComplementChange(this)" />
           <div class="radio-content">
             <strong>${c.name}</strong>
             <small>${c.desc}</small>
           </div>
         </label>
       `).join('');
+
+      compContainer.innerHTML = compsHtml;
     }
 
-    // Populate toppings extras
+    // Populate toppings extras (Livre - Opção "Sem Cobertura Extra")
     const topContainer = document.getElementById('toppings-options-container');
     if (topContainer && state.toppings) {
-      topContainer.innerHTML = state.toppings.map(t => {
+      let topHtml = `
+        <label class="checkbox-option" style="background: #f8fafc; border-color: #cbd5e1;">
+          <input type="checkbox" id="chk-no-topping" onchange="toggleNoTopping(this)" checked />
+          <div class="radio-content">
+            <strong>❌ Sem Cobertura Extra</strong>
+            <small>Sem adicionais pagos</small>
+          </div>
+        </label>
+      `;
+
+      topHtml += state.toppings.map(t => {
         const pNum = parseFloat(t.price) || 0;
         return `
           <label class="checkbox-option">
-            <input type="checkbox" name="acai-topping" value="${t.name}" data-price="${pNum}" onchange="calcBuilderTotal()" />
+            <input type="checkbox" name="acai-topping" value="${t.name}" data-price="${pNum}" onchange="handleToppingChange(this)" />
             <div class="radio-content">
               <strong>${t.icon || '🍫'} ${t.name} (+ R$ ${pNum.toFixed(2).replace('.', ',')})</strong>
             </div>
           </label>
         `;
       }).join('');
+
+      topContainer.innerHTML = topHtml;
     }
 
     const notesEl = document.getElementById('acai-notes');
@@ -218,6 +242,36 @@ function closeAcaiBuilderModal() {
     modal.classList.remove('active');
     modal.style.display = 'none';
   }
+}
+
+function toggleNoComplement(el) {
+  if (el.checked) {
+    document.querySelectorAll('input[name="acai-complement"]').forEach(i => i.checked = false);
+  }
+  calcBuilderTotal();
+}
+
+function handleComplementChange(el) {
+  const noComp = document.getElementById('chk-no-complement');
+  if (noComp && el.checked) {
+    noComp.checked = false;
+  }
+  calcBuilderTotal();
+}
+
+function toggleNoTopping(el) {
+  if (el.checked) {
+    document.querySelectorAll('input[name="acai-topping"]').forEach(i => i.checked = false);
+  }
+  calcBuilderTotal();
+}
+
+function handleToppingChange(el) {
+  const noTop = document.getElementById('chk-no-topping');
+  if (noTop && el.checked) {
+    noTop.checked = false;
+  }
+  calcBuilderTotal();
 }
 
 function calcBuilderTotal() {
@@ -263,8 +317,10 @@ function addAcaiToCartFromBuilder() {
 
   const notes = document.getElementById('acai-notes').value.trim();
 
-  let detailsText = `Acompanhamentos (${comps.length} sel${comps.length > 3 ? ' - ' + (comps.length - 3) + ' extra +R$ ' + compExtraFee.toFixed(2) : ''}): ${comps.length ? comps.join(', ') : 'Nenhum'}`;
-  if (topps.length) detailsText += ` | Coberturas: ${topps.join(', ')}`;
+  let compText = comps.length ? `Acompanhamentos (${comps.length} sel${comps.length > 3 ? ' - ' + (comps.length - 3) + ' extra +R$ ' + compExtraFee.toFixed(2) : ''}): ${comps.join(', ')}` : 'Sem acompanhamentos';
+  let topText = topps.length ? `Coberturas: ${topps.join(', ')}` : 'Sem cobertura extra';
+
+  let detailsText = `${compText} | ${topText}`;
   if (notes) detailsText += ` | Obs: ${notes}`;
 
   const itemTotal = basePrice + extraCost;
