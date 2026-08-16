@@ -167,12 +167,12 @@ function openAcaiBuilderModal(key, title, fallbackPrice) {
     if (titleEl) titleEl.innerText = `Montar ${title}`;
     if (priceEl) priceEl.innerText = `Valor Base: R$ ${basePrice.toFixed(2).replace('.', ',')}`;
 
-    // Populate complements grátis
+    // Populate complements (Até 3 grátis! Excesso: + R$ 2,00 cada)
     const compContainer = document.getElementById('complements-options-container');
     if (compContainer && state.complements && state.complements.length) {
-      compContainer.innerHTML = state.complements.map(c => `
+      compContainer.innerHTML = state.complements.map((c, idx) => `
         <label class="checkbox-option">
-          <input type="checkbox" name="acai-complement" value="${c.name}" checked />
+          <input type="checkbox" name="acai-complement" value="${c.name}" ${idx < 3 ? 'checked' : ''} onchange="calcBuilderTotal()" />
           <div class="radio-content">
             <strong>${c.name}</strong>
             <small>${c.desc}</small>
@@ -225,6 +225,12 @@ function calcBuilderTotal() {
 
   let total = state.activeBuilderSize.basePrice;
 
+  // Complements extra fee (+ R$ 2,00 for each item beyond 3)
+  const complementInputs = document.querySelectorAll('input[name="acai-complement"]:checked');
+  if (complementInputs.length > 3) {
+    total += (complementInputs.length - 3) * 2.00;
+  }
+
   // Selected toppings
   const toppingInputs = document.querySelectorAll('input[name="acai-topping"]:checked');
   toppingInputs.forEach(input => {
@@ -243,9 +249,13 @@ function addAcaiToCartFromBuilder() {
 
   // Complements
   const comps = Array.from(document.querySelectorAll('input[name="acai-complement"]:checked')).map(i => i.value);
+  let compExtraFee = 0;
+  if (comps.length > 3) {
+    compExtraFee = (comps.length - 3) * 2.00;
+  }
   
   // Toppings
-  let extraCost = 0;
+  let extraCost = compExtraFee;
   const topps = Array.from(document.querySelectorAll('input[name="acai-topping"]:checked')).map(i => {
     extraCost += parseFloat(i.getAttribute('data-price')) || 0;
     return i.value;
@@ -253,7 +263,7 @@ function addAcaiToCartFromBuilder() {
 
   const notes = document.getElementById('acai-notes').value.trim();
 
-  let detailsText = `Comps: ${comps.length ? comps.join(', ') : 'Nenhum'}`;
+  let detailsText = `Acompanhamentos (${comps.length} sel${comps.length > 3 ? ' - ' + (comps.length - 3) + ' extra +R$ ' + compExtraFee.toFixed(2) : ''}): ${comps.length ? comps.join(', ') : 'Nenhum'}`;
   if (topps.length) detailsText += ` | Coberturas: ${topps.join(', ')}`;
   if (notes) detailsText += ` | Obs: ${notes}`;
 
