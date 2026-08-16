@@ -546,9 +546,125 @@ function renderUserOrdersTracker() {
             </div>
           </div>
         </div>
+
+        <div style="margin-top: 0.75rem; display: flex; justify-content: flex-end;">
+          <button class="btn btn-purple btn-sm" onclick="openOrderReceiptModal('${o.id}')">
+            <i class="fa-solid fa-receipt"></i> Ver Cupom / Comprovante
+          </button>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+// --- CUPOM / COMPROVANTE DIGITAL ---
+let activeReceiptOrder = null;
+
+function openOrderReceiptModal(orderId) {
+  const order = state.orders.find(o => o.id === orderId);
+  if (!order) return;
+
+  activeReceiptOrder = order;
+
+  const container = document.getElementById('receipt-modal-body');
+  if (!container) return;
+
+  const priceNum = parseFloat(order.total) || 0;
+
+  container.innerHTML = `
+    <div id="printable-receipt-content" style="background: #ffffff; border: 1px dashed #cbd5e1; padding: 1.25rem; border-radius: var(--radius-sm); font-family: 'Courier New', Courier, monospace; color: #0f172a;">
+      <div style="text-align: center; border-bottom: 2px dashed #94a3b8; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 900; margin-bottom: 2px;">🍧 MEUAÇAI DELIVERY</h3>
+        <p style="font-size: 0.75rem;">O Melhor Açaí no Copo & Barcas</p>
+        <p style="font-size: 0.7rem;">Balneário Camboriú - SC • Tel/WA: (47) 99999-8888</p>
+      </div>
+
+      <div style="font-size: 0.78rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+        <div><strong>PEDIDO Nº:</strong> <span style="font-weight: 900; color: #7e22ce;">${order.id}</span></div>
+        <div><strong>DATA/HORA:</strong> ${order.date || 'Hoje'}</div>
+        <div><strong>CLIENTE:</strong> ${order.clientName || 'Cliente'}</div>
+        <div><strong>TELEFONE:</strong> ${order.clientPhone || 'Não informado'}</div>
+        <div><strong>ENDEREÇO:</strong> ${order.address}</div>
+      </div>
+
+      <div style="font-size: 0.78rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+        <div style="font-weight: 800; margin-bottom: 4px;">ITENS DO PEDIDO:</div>
+        <p style="white-space: pre-wrap; font-size: 0.75rem; line-height: 1.4;">${order.items}</p>
+      </div>
+
+      <div style="font-size: 0.82rem; font-weight: 800; display: flex; justify-content: space-between; border-bottom: 2px dashed #94a3b8; padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+        <span>FORMA PAGO: ${order.paymentMethod || 'PIX / Cartão'}</span>
+        <span style="font-size: 1rem; color: #7e22ce;">TOTAL: R$ ${priceNum.toFixed(2).replace('.', ',')}</span>
+      </div>
+
+      <div style="text-align: center; font-size: 0.7rem; color: #64748b;">
+        <p>Agradecemos a sua preferência!</p>
+        <p>Volte Sempre! 🍧💜</p>
+      </div>
+    </div>
+  `;
+
+  const modal = document.getElementById('modal-receipt');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+  }
+}
+
+function closeReceiptModal() {
+  const modal = document.getElementById('modal-receipt');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+
+function sendReceiptWhatsApp() {
+  if (!activeReceiptOrder) return;
+  const o = activeReceiptOrder;
+  const priceNum = parseFloat(o.total) || 0;
+
+  const msg = `*🍧 COMPROVANTE MEUAÇAI DELIVERY*%0A` +
+    `*Pedido:* ${o.id}%0A` +
+    `*Data:* ${o.date || 'Hoje'}%0A` +
+    `*Cliente:* ${o.clientName}%0A` +
+    `*Endereço:* ${o.address}%0A%0A` +
+    `*Itens:* ${o.items}%0A%0A` +
+    `*Pagamento:* ${o.paymentMethod}%0A` +
+    `*TOTAL:* R$ ${priceNum.toFixed(2).replace('.', ',')}%0A%0A` +
+    `_Obrigado pela preferência! Bom açaí! 🍧💜_`;
+
+  const phone = o.clientPhone ? o.clientPhone.replace(/\D/g, '') : '5547999998888';
+  window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${msg}`, '_blank');
+}
+
+function printOrderReceipt() {
+  const content = document.getElementById('printable-receipt-content');
+  if (!content) return;
+
+  const printWin = window.open('', '', 'width=400,height=600');
+  printWin.document.write(`
+    <html>
+      <head>
+        <title>Cupom - ${activeReceiptOrder ? activeReceiptOrder.id : 'Pedido'}</title>
+        <style>
+          body { font-family: monospace; padding: 10px; margin: 0; }
+          @media print {
+            @page { margin: 0; size: auto; }
+          }
+        </style>
+      </head>
+      <body>
+        ${content.innerHTML}
+      </body>
+    </html>
+  `);
+  printWin.document.close();
+  printWin.focus();
+  setTimeout(() => {
+    printWin.print();
+    printWin.close();
+  }, 250);
 }
 
 // --- PROGRAMA DE FIDELIDADE (JS) ---
