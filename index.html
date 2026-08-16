@@ -455,10 +455,31 @@
     </div>
   </div>
 
+  <!-- MODAL: CUPOM / COMPROVANTE DIGITAL -->
+  <div class="modal-overlay" id="modal-receipt">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header bg-purple">
+        <h3><i class="fa-solid fa-receipt"></i> Comprovante do Pedido</h3>
+        <button class="btn-close-modal" onclick="closeReceiptModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="builder-body" id="receipt-modal-body">
+        <!-- JS Rendered Receipt -->
+      </div>
+      <div class="builder-footer" style="flex-direction: column; gap: 0.5rem;">
+        <button class="btn btn-purple btn-full" onclick="sendReceiptWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> Enviar Comprovante no WhatsApp
+        </button>
+        <button class="btn btn-secondary btn-full" onclick="printOrderReceipt()">
+          <i class="fa-solid fa-print"></i> Imprimir Cupom / Salvar PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
   <!-- JavaScript -->
-  <script src="app.js?v=1.0"></script>
+  <script src="app.js?v=1.1"></script>
 </body>
 </html>
