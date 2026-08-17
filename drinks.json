@@ -1,7 +1,5 @@
 [
   { "id": "drk_1", "name": "🥤 Coca-Cola Lata 350ml", "price": 5.00, "icon": "🥤" },
   { "id": "drk_2", "name": "🍋 Guaraná Antarctica 350ml", "price": 5.00, "icon": "🥤" },
-  { "id": "drk_3", "name": "🍊 Suco Natural de Laranja 500ml", "price": 8.00, "icon": "🧃" },
-  { "id": "drk_4", "name": "🍓 Suco de Morango c/ Leite 500ml", "price": 9.00, "icon": "🧃" },
-  { "id": "drk_5", "name": "💧 Água Mineral sem Gás 500ml", "price": 3.00, "icon": "💧" }
+  { "id": "drk_4", "name": "💧 Água Mineral sem Gás 500ml", "price": 3.00, "icon": "💧" }
 ]
