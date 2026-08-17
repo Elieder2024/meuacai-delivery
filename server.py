@@ -14,6 +14,15 @@ TOPPINGS_FILE = os.path.join(DATA_DIR, "toppings.json")
 DRINKS_FILE = os.path.join(DATA_DIR, "drinks.json")
 CUSTOMERS_FILE = os.path.join(DATA_DIR, "customers.json")
 REWARDS_FILE = os.path.join(DATA_DIR, "rewards.json")
+STORE_HOURS_FILE = os.path.join(DATA_DIR, "store_hours.json")
+
+DEFAULT_STORE_HOURS = {
+  "manualStatus": "auto",
+  "openTime": "11:00",
+  "closeTime": "23:00",
+  "daysOpen": [0, 1, 2, 3, 4, 5, 6],
+  "closedMessage": "🔴 Loja Fechada no Momento! Nosso horário de funcionamento é das 11:00 às 23:00. Fique à vontade para olhar nosso cardápio!"
+}
 
 DEFAULT_ORDERS = [
   {
@@ -167,6 +176,14 @@ class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(safe_cust, ensure_ascii=False).encode('utf-8'))
             return
 
+        if self.path == '/api/store-hours':
+            hours = load_json_file(STORE_HOURS_FILE, DEFAULT_STORE_HOURS)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(hours, ensure_ascii=False).encode('utf-8'))
+            return
+
         if self.path == '/api/rewards':
             rewards = load_json_file(REWARDS_FILE, DEFAULT_REWARDS)
             self.send_response(200)
@@ -208,6 +225,15 @@ class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({"status": "ok", "message": "Pedido de Açaí recebido na loja!"}).encode('utf-8'))
+            return
+
+        if self.path == '/api/store-hours':
+            hours = req_data
+            save_json_file(STORE_HOURS_FILE, hours)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "ok", "storeHours": hours}, ensure_ascii=False).encode('utf-8'))
             return
 
         if self.path == '/api/orders/update-status':
