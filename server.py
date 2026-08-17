@@ -96,6 +96,16 @@ def save_json_file(filepath, data):
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+# Force sync catalog config on server startup to guarantee live updates
+try:
+    save_json_file(ACAI_SIZES_FILE, DEFAULT_ACAI_SIZES)
+    save_json_file(COMPLEMENTS_FILE, DEFAULT_COMPLEMENTS)
+    save_json_file(TOPPINGS_FILE, DEFAULT_TOPPINGS)
+    save_json_file(DRINKS_FILE, DEFAULT_DRINKS)
+    save_json_file(REWARDS_FILE, DEFAULT_REWARDS)
+except Exception:
+    pass
+
 class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
