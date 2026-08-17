@@ -39,9 +39,9 @@ DEFAULT_ORDERS = [
 ]
 
 DEFAULT_ACAI_SIZES = {
-  "copo300": 14.00,
-  "copo500": 18.00,
-  "copo700": 24.00,
+  "copo300": 19.99,
+  "copo500": 25.99,
+  "copo700": 32.99,
   "tigela1000": 32.00
 }
 
@@ -50,12 +50,12 @@ DEFAULT_COMPLEMENTS = [
   { "id": "comp_2", "name": "🍓 Morango Fresco", "desc": "Morangos frescos fatiados" },
   { "id": "comp_3", "name": "🥛 Leite em Pó (Ninho)", "desc": "Bastante leite em pó polvilhado" },
   { "id": "comp_4", "name": "🌾 Granola Crocante", "desc": "Granola artesanal com mel e castanhas" },
-  { "id": "comp_5", "name": "🍯 Leite Condensado", "desc": "Leite condensado cremoso Moça" },
-  { "id": "comp_6", "name": "🍯 Mel Puro de Abelha", "desc": "Mel 100% natural" }
+  { "id": "comp_5", "name": "🍯 Leite Condensado", "desc": "Leite condensado cremoso Moça" }
 ]
 
 DEFAULT_TOPPINGS = [
-  { "id": "top_1", "name": "🌰 Nutella Original (Porção)", "price": 4.50, "icon": "🌰" },
+  { "id": "top_1", "name": "🌰 Nutella Original (Porção)", "price": 7.00, "icon": "🌰" },
+  { "id": "top_9", "name": "🥝 Kiwi Fresco (Porção)", "price": 4.00, "icon": "🥝" },
   { "id": "top_2", "name": "🥛 Creme de Ninho Caseiro", "price": 3.50, "icon": "🥛" },
   { "id": "top_3", "name": "🥜 Paçoca Moída Crocante", "price": 2.50, "icon": "🥜" },
   { "id": "top_4", "name": "🍫 KitKat Picado", "price": 3.50, "icon": "🍫" },
