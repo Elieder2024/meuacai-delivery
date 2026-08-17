@@ -479,6 +479,28 @@
     </div>
   </div>
 
+  <!-- MODAL: LOJA FECHADA -->
+  <div class="modal-overlay" id="modal-store-closed">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header" style="background: #991b1b; color: #fff;">
+        <h3><i class="fa-solid fa-store-slash"></i> Loja Fechada no Momento</h3>
+        <button class="btn-close-modal" onclick="closeStoreClosedModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="builder-body" style="padding: 1.5rem; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔴</div>
+        <h4 style="font-size: 1.15rem; color: #991b1b; font-weight: 800; margin-bottom: 0.75rem;" id="store-closed-modal-title">Estamos Fechados!</h4>
+        <p style="font-size: 0.88rem; color: #334155; line-height: 1.5;" id="store-closed-modal-msg">
+          Nosso horário de funcionamento é das 11:00 às 23:00. Fique à vontade para olhar nosso cardápio!
+        </p>
+      </div>
+      <div class="builder-footer" style="padding: 1rem 1.5rem;">
+        <button class="btn btn-purple btn-full" onclick="closeStoreClosedModal()">
+          Entendi, apenas visualizar cardápio
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
