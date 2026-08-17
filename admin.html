@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MeuAçai - Painel do Dono & Loja</title>
+  <title>Nunu Açai - Painel do Dono & Loja</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,9 +55,9 @@
     
     <!-- HEADER -->
     <header class="admin-top-bar">
-      <h1><i class="fa-solid fa-store"></i> PAINEL DO DONO - MEUAÇAI</h1>
+      <h1><i class="fa-solid fa-store"></i> PAINEL DO DONO - NUNU AÇAÍ</h1>
       <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <span style="font-size: 0.82rem; background: rgba(255,255,255,0.2); padding: 0.35rem 0.75rem; border-radius: 20px;" id="owner-logged-text">Dono: dono@meuacai.com.br</span>
+        <span style="font-size: 0.82rem; background: rgba(255,255,255,0.2); padding: 0.35rem 0.75rem; border-radius: 20px;" id="owner-logged-text">Dono: dono@nunuacai.com.br</span>
         <button class="btn btn-secondary btn-sm" onclick="handleOwnerLogoutPage()"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
       </div>
     </header>
@@ -471,7 +471,7 @@
       </div>
       <!-- FOOTER DIREITOS AUTORAIS -->
       <footer style="text-align: center; padding: 1.5rem 1rem; font-size: 0.78rem; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 2rem;">
-        <p>© 2026 MeuAçai • Todos os direitos reservados</p>
+        <p>© 2026 Nunu Açai • Todos os direitos reservados</p>
         <p style="margin-top: 0.25rem; font-weight: 700; color: #7e22ce;">Desenvolvido por Eliéder Vicente</p>
       </footer>
     </div>
@@ -481,7 +481,7 @@
   <div class="modal-overlay" id="modal-admin-login">
     <div class="modal-content" style="max-width: 420px;">
       <div class="modal-header bg-purple">
-        <h3><i class="fa-solid fa-lock text-yellow"></i> Login do Dono - MeuAçai</h3>
+        <h3><i class="fa-solid fa-lock text-yellow"></i> Login do Dono - Nunu Açai</h3>
       </div>
       <div class="builder-body">
         <p style="font-size: 0.8rem; color: var(--color-gray); margin-bottom: 1rem;">Digite seu e-mail e senha de proprietário para acessar o painel de controle da loja.</p>
@@ -489,7 +489,7 @@
         <form onsubmit="handleAdminPageLogin(event)">
           <div class="form-group margin-top-sm">
             <label for="login-owner-email">E-mail do Dono</label>
-            <input type="email" id="login-owner-email" value="dono@meuacai.com.br" required />
+            <input type="email" id="login-owner-email" value="dono@nunuacai.com.br" required />
           </div>
 
           <div class="form-group margin-top-sm">
@@ -537,7 +537,7 @@
   <!-- JS CODE -->
   <script>
     const OWNER_CREDENTIALS = {
-      email: 'dono@meuacai.com.br',
+      email: 'dono@nunuacai.com.br',
       password: '123'
     };
 
@@ -860,9 +860,9 @@
       const p700 = document.getElementById('price-copo700');
       const p1000 = document.getElementById('price-tigela1000');
 
-      if (p300) p300.value = parseFloat(adminState.acaiSizes.copo300 || 14.00).toFixed(2);
-      if (p500) p500.value = parseFloat(adminState.acaiSizes.copo500 || 18.00).toFixed(2);
-      if (p700) p700.value = parseFloat(adminState.acaiSizes.copo700 || 24.00).toFixed(2);
+      if (p300) p300.value = parseFloat(adminState.acaiSizes.copo300 || 19.99).toFixed(2);
+      if (p500) p500.value = parseFloat(adminState.acaiSizes.copo500 || 25.99).toFixed(2);
+      if (p700) p700.value = parseFloat(adminState.acaiSizes.copo700 || 32.99).toFixed(2);
       if (p1000) p1000.value = parseFloat(adminState.acaiSizes.tigela1000 || 32.00).toFixed(2);
     }
 
