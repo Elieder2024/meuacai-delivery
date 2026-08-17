@@ -8,8 +8,7 @@ const state = {
   acaiSizes: {
     copo300: 19.99,
     copo500: 25.99,
-    copo700: 32.99,
-    tigela1000: 32.00
+    copo700: 32.99
   },
   complements: [],
   toppings: [],
