@@ -1,23 +1,27 @@
 {
+  "id": "/",
   "short_name": "Nunu Açai",
-  "name": "Nunu Açai - Delivery Balneário Camboriú",
+  "name": "Nunu Açai - Delivery",
+  "description": "O Melhor Açaí Puro e Cremoso de Balneário Camboriú. Peça pelo app!",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/icon-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "/icon-512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
+  "scope": "/",
   "background_color": "#0f172a",
   "theme_color": "#7e22ce",
   "display": "standalone",
   "orientation": "portrait",
-  "description": "O Melhor Açaí Puro e Cremoso de Balneário Camboriú. Peça pelo app!",
   "categories": ["food", "shopping"]
 }
