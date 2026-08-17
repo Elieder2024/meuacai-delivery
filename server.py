@@ -41,31 +41,25 @@ DEFAULT_ORDERS = [
 DEFAULT_ACAI_SIZES = {
   "copo300": 19.99,
   "copo500": 25.99,
-  "copo700": 32.99,
-  "tigela1000": 32.00
+  "copo700": 32.99
 }
 
 DEFAULT_COMPLEMENTS = [
-  { "id": "comp_1", "name": "🍌 Banana Fatiada", "desc": "Banana prata novinha fatiada na hora" },
+  { "id": "comp_1", "name": "🍌 Banana Fatiada", "desc": "Banana prata fatiada na hora" },
   { "id": "comp_2", "name": "🍓 Morango Fresco", "desc": "Morangos frescos fatiados" },
-  { "id": "comp_3", "name": "🥛 Leite em Pó (Ninho)", "desc": "Bastante leite em pó polvilhado" },
-  { "id": "comp_4", "name": "🌾 Granola Crocante", "desc": "Granola artesanal com mel e castanhas" },
-  { "id": "comp_5", "name": "🍯 Leite Condensado", "desc": "Leite condensado cremoso Moça" }
+  { "id": "comp_3", "name": "🥛 Leite em Pó (Ninho)", "desc": "Leite em pó polvilhado" },
+  { "id": "comp_4", "name": "🌾 Granola Crocante", "desc": "Granola crocante" },
+  { "id": "comp_5", "name": "🍯 Leite Condensado", "desc": "Leite condensado" }
 ]
 
 DEFAULT_TOPPINGS = [
-  { "id": "top_1", "name": "🌰 Nutella Original (Porção)", "price": 7.00, "icon": "🌰" },
-  { "id": "top_9", "name": "🥝 Kiwi Fresco (Porção)", "price": 4.00, "icon": "🥝" },
-  { "id": "top_2", "name": "🥛 Creme de Ninho Caseiro", "price": 3.50, "icon": "🥛" },
-  { "id": "top_3", "name": "🥜 Paçoca Moída Crocante", "price": 2.50, "icon": "🥜" },
-  { "id": "top_4", "name": "🍫 KitKat Picado", "price": 3.50, "icon": "🍫" },
-  { "id": "top_5", "name": "🔴 M&Ms Coloridos", "price": 3.00, "icon": "🔴" }
+  { "id": "top_1", "name": "🌰 Nutella Original", "price": 7.00, "icon": "🌰" },
+  { "id": "top_9", "name": "🥝 Kiwi Fresco", "price": 4.00, "icon": "🥝" }
 ]
 
 DEFAULT_DRINKS = [
   { "id": "drk_1", "name": "🥤 Coca-Cola Lata 350ml", "price": 5.00, "icon": "🥤" },
   { "id": "drk_2", "name": "🍋 Guaraná Antarctica 350ml", "price": 5.00, "icon": "🥤" },
-  { "id": "drk_3", "name": "🍊 Suco Natural de Laranja 500ml", "price": 8.00, "icon": "🧃" },
   { "id": "drk_4", "name": "💧 Água Mineral sem Gás 500ml", "price": 3.00, "icon": "💧" }
 ]
 
