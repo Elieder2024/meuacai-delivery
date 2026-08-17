@@ -6,9 +6,9 @@ const state = {
   cart: [],
   orders: [],
   acaiSizes: {
-    copo300: 14.00,
-    copo500: 18.00,
-    copo700: 24.00,
+    copo300: 19.99,
+    copo500: 25.99,
+    copo700: 32.99,
     tigela1000: 32.00
   },
   complements: [],
