@@ -1,5 +1,6 @@
 [
-  { "id": "top_1", "name": "🌰 Nutella Original (Porção)", "price": 4.50, "icon": "🌰" },
+  { "id": "top_1", "name": "🌰 Nutella Original (Porção)", "price": 7.00, "icon": "🌰" },
+  { "id": "top_9", "name": "🥝 Kiwi Fresco (Porção)", "price": 4.00, "icon": "🥝" },
   { "id": "top_2", "name": "🥛 Creme de Ninho Caseiro", "price": 3.50, "icon": "🥛" },
   { "id": "top_3", "name": "🥜 Paçoca Moída Crocante", "price": 2.50, "icon": "🥜" },
   { "id": "top_4", "name": "🍫 KitKat Picado", "price": 3.50, "icon": "🍫" },
