@@ -85,6 +85,9 @@
       <button type="button" class="partner-tab-btn" id="btn-tab-reports" onclick="switchAdminPageTab('reports', this)">
         <i class="fa-solid fa-chart-line text-purple"></i> 📊 Relatório de Vendas
       </button>
+      <button type="button" class="partner-tab-btn" id="btn-tab-hours" onclick="switchAdminPageTab('hours', this)">
+        <i class="fa-solid fa-clock text-yellow"></i> ⏰ Horário da Loja
+      </button>
       <a href="index.html" target="_blank" class="partner-tab-btn" style="text-decoration: none; margin-left: auto; background: #e2e8f0; color: #1e293b;">
         <i class="fa-solid fa-external-link"></i> Abrir App do Cliente
       </a>
@@ -402,6 +405,70 @@
               <!-- JS Rendered Report Rows -->
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- TAB 7: HORÁRIO DE FUNCIONAMENTO DA LOJA -->
+      <div class="partner-tab-pane" id="pane-admin-hours">
+        <div style="max-width: 650px; background: #f8fafc; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid #e2e8f0;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.2rem; color: var(--color-dark); margin-bottom: 0.25rem;">⏰ Configurar Horário de Funcionamento</h3>
+          <p style="font-size: 0.82rem; color: var(--color-gray); margin-bottom: 1.25rem;">Defina os dias, horários de abertura/fechamento e se a loja está aberta ou fechada para pedidos.</p>
+
+          <form onsubmit="handleAdminSaveStoreHours(event)">
+            <!-- STATUS MANUAL OVERRIDE -->
+            <div style="background: #ffffff; padding: 1rem; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 1.25rem;">
+              <label style="font-weight: 800; font-size: 0.9rem; display: block; margin-bottom: 0.5rem; color: var(--color-dark);">Status Atual da Loja (Modo):</label>
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #16a34a;">
+                  <input type="radio" name="store-manual-status" value="open" /> 🟢 Forçar ABERTA Agora
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #dc2626;">
+                  <input type="radio" name="store-manual-status" value="closed" /> 🔴 Forçar FECHADA Agora
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #2563eb;">
+                  <input type="radio" name="store-manual-status" value="auto" checked /> ⚙️ Automático (Conforme Horário)
+                </label>
+              </div>
+            </div>
+
+            <!-- HORÁRIOS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+              <div class="form-group">
+                <label for="store-open-time" style="font-weight: 700;">Horário de Abertura</label>
+                <input type="time" id="store-open-time" value="11:00" required />
+              </div>
+              <div class="form-group">
+                <label for="store-close-time" style="font-weight: 700;">Horário de Fechamento</label>
+                <input type="time" id="store-close-time" value="23:00" required />
+              </div>
+            </div>
+
+            <!-- DIAS DA SEMANA -->
+            <div class="form-group margin-top-sm" style="margin-bottom: 1.25rem;">
+              <label style="font-weight: 700; display: block; margin-bottom: 0.5rem;">Dias em que a Loja Abre:</label>
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <label><input type="checkbox" name="store-days" value="0" checked /> Dom</label>
+                <label><input type="checkbox" name="store-days" value="1" checked /> Seg</label>
+                <label><input type="checkbox" name="store-days" value="2" checked /> Ter</label>
+                <label><input type="checkbox" name="store-days" value="3" checked /> Qua</label>
+                <label><input type="checkbox" name="store-days" value="4" checked /> Qui</label>
+                <label><input type="checkbox" name="store-days" value="5" checked /> Sex</label>
+                <label><input type="checkbox" name="store-days" value="6" checked /> Sáb</label>
+              </div>
+            </div>
+
+            <!-- MENSAGEM DE LOJA FECHADA -->
+            <div class="form-group margin-top-sm" style="margin-bottom: 1.25rem;">
+              <label for="store-closed-msg" style="font-weight: 700;">Mensagem Exibida Quando a Loja Estiver Fechada:</label>
+              <textarea id="store-closed-msg" rows="3" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-purple btn-full">
+              <i class="fa-solid fa-floppy-disk"></i> Salvar Configurações de Horário
+            </button>
+          </form>
+        </div>
+      </div>
       <!-- FOOTER DIREITOS AUTORAIS -->
       <footer style="text-align: center; padding: 1.5rem 1rem; font-size: 0.78rem; color: #64748b; border-top: 1px solid #e2e8f0; margin-top: 2rem;">
         <p>© 2026 MeuAçai • Todos os direitos reservados</p>
@@ -612,6 +679,15 @@
         if (resRew.ok) adminState.rewards = await resRew.json();
       } catch(e) {}
 
+      // Store Hours
+      try {
+        const resH = await fetch('/api/store-hours');
+        if (resH.ok) {
+          adminState.storeHours = await resH.json();
+          renderAdminStoreHoursUI();
+        }
+      } catch(e) {}
+
       renderAdminPageOrders();
       renderAdminPricesForm();
       renderAdminComplementsTable();
@@ -628,6 +704,68 @@
       btn.classList.add('active');
       const pane = document.getElementById(`pane-admin-${tab}`);
       if (pane) pane.classList.add('active');
+    }
+
+    function renderAdminStoreHoursUI() {
+      if (!adminState.storeHours) return;
+      const sh = adminState.storeHours;
+
+      const radios = document.querySelectorAll('input[name="store-manual-status"]');
+      radios.forEach(r => {
+        if (r.value === (sh.manualStatus || 'auto')) r.checked = true;
+      });
+
+      const openEl = document.getElementById('store-open-time');
+      const closeEl = document.getElementById('store-close-time');
+      if (openEl) openEl.value = sh.openTime || '11:00';
+      if (closeEl) closeEl.value = sh.closeTime || '23:00';
+
+      const dayCheckboxes = document.querySelectorAll('input[name="store-days"]');
+      const daysOpen = sh.daysOpen || [0,1,2,3,4,5,6];
+      dayCheckboxes.forEach(cb => {
+        cb.checked = daysOpen.map(Number).includes(parseInt(cb.value));
+      });
+
+      const msgEl = document.getElementById('store-closed-msg');
+      if (msgEl) msgEl.value = sh.closedMessage || '🔴 Loja Fechada no Momento! Nosso horário de funcionamento é das 11:00 às 23:00. Fique à vontade para olhar nosso cardápio!';
+    }
+
+    async function handleAdminSaveStoreHours(e) {
+      e.preventDefault();
+      const statusRadio = document.querySelector('input[name="store-manual-status"]:checked');
+      const manualStatus = statusRadio ? statusRadio.value : 'auto';
+
+      const openTime = document.getElementById('store-open-time').value || '11:00';
+      const closeTime = document.getElementById('store-close-time').value || '23:00';
+
+      const dayCheckboxes = document.querySelectorAll('input[name="store-days"]:checked');
+      const daysOpen = Array.from(dayCheckboxes).map(cb => parseInt(cb.value));
+
+      const closedMessage = document.getElementById('store-closed-msg').value.trim();
+
+      const payload = {
+        manualStatus,
+        openTime,
+        closeTime,
+        daysOpen,
+        closedMessage
+      };
+
+      try {
+        const res = await fetch('/api/store-hours', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          adminState.storeHours = payload;
+          showToast('⏰ Configurações de horário de funcionamento salvas com sucesso!', 'success');
+        } else {
+          showToast('Erro ao salvar horário de funcionamento.', 'danger');
+        }
+      } catch(err) {
+        showToast('Erro ao conectar com o servidor.', 'danger');
+      }
     }
 
     function renderAdminPageOrders() {
