@@ -123,6 +123,42 @@ class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        clean_path = self.path.split('?')[0]
+
+        if clean_path in ['/manifest.json', '/manifest.webmanifest']:
+            filepath = os.path.join(os.path.dirname(__file__), 'manifest.json')
+            if os.path.exists(filepath):
+                with open(filepath, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/manifest+json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(content)
+                return
+
+        if clean_path in ['/sw.js', '/service-worker.js']:
+            filepath = os.path.join(os.path.dirname(__file__), 'sw.js')
+            if os.path.exists(filepath):
+                with open(filepath, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/javascript; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(content)
+                return
+
+        if clean_path in ['/icon-192.png', '/icon-512.png']:
+            filename = os.path.basename(clean_path)
+            filepath = os.path.join(os.path.dirname(__file__), filename)
+            if os.path.exists(filepath):
+                with open(filepath, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/png')
+                self.end_headers()
+                self.wfile.write(content)
+                return
+
         if self.path == '/api/orders':
             orders = load_json_file(ORDERS_FILE, DEFAULT_ORDERS)
             self.send_response(200)
