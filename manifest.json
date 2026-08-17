@@ -1,33 +1,49 @@
 {
-  "id": "https://meuacai-bc-production.up.railway.app/",
-  "short_name": "Nunu Açai",
+  "id": "/",
   "name": "Nunu Açai - Delivery",
+  "short_name": "Nunu Açai",
   "description": "O Melhor Açaí Puro e Cremoso de Balneário Camboriú. Peça pelo app!",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#7e22ce",
   "icons": [
     {
-      "src": "https://meuacai-bc-production.up.railway.app/icon-192.png",
-      "type": "image/png",
+      "src": "icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://meuacai-bc-production.up.railway.app/icon-512.png",
-      "type": "image/png",
+      "src": "icon-512.png",
       "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://meuacai-bc-production.up.railway.app/icon-512.png",
-      "type": "image/png",
+      "src": "icon-512.png",
       "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "start_url": "https://meuacai-bc-production.up.railway.app/",
-  "scope": "https://meuacai-bc-production.up.railway.app/",
-  "background_color": "#0f172a",
-  "theme_color": "#7e22ce",
-  "display": "standalone",
-  "orientation": "portrait",
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tela Principal Nunu Açai"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Cardápio Nunu Açai"
+    }
+  ],
   "categories": ["food", "shopping"]
 }
