@@ -15,6 +15,11 @@ DRINKS_FILE = os.path.join(DATA_DIR, "drinks.json")
 CUSTOMERS_FILE = os.path.join(DATA_DIR, "customers.json")
 REWARDS_FILE = os.path.join(DATA_DIR, "rewards.json")
 STORE_HOURS_FILE = os.path.join(DATA_DIR, "store_hours.json")
+ADMIN_PASS_FILE = os.path.join(DATA_DIR, "admin_pass.json")
+PIX_KEY_FILE = os.path.join(DATA_DIR, "pix_key.json")
+
+DEFAULT_ADMIN_PASS = { "password": "123" }
+DEFAULT_PIX_KEY = { "pixKey": "eliederjogos2023@gmail.com", "holder": "Nunu Açai" }
 
 DEFAULT_STORE_HOURS = {
   "manualStatus": "auto",
@@ -230,6 +235,22 @@ class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(rewards, ensure_ascii=False).encode('utf-8'))
+            return
+
+        if self.path == '/api/admin-pass':
+            data = load_json_file(ADMIN_PASS_FILE, DEFAULT_ADMIN_PASS)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+            return
+
+        if self.path == '/api/pix-key':
+            data = load_json_file(PIX_KEY_FILE, DEFAULT_PIX_KEY)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
             return
 
         super().do_GET()
@@ -553,6 +574,27 @@ class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"status": "ok", "rewards": rewards}).encode('utf-8'))
             return
 
+        if self.path == '/api/admin-pass':
+            new_pass = str(req_data.get('password', '')).strip()
+            if new_pass:
+                save_json_file(ADMIN_PASS_FILE, { "password": new_pass })
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "ok"}).encode('utf-8'))
+            return
+
+        if self.path == '/api/pix-key':
+            new_key = str(req_data.get('pixKey', '')).strip()
+            new_holder = str(req_data.get('holder', 'Nunu Açai')).strip()
+            if new_key:
+                save_json_file(PIX_KEY_FILE, { "pixKey": new_key, "holder": new_holder })
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "ok"}).encode('utf-8'))
+            return
+
         self.send_response(404)
         self.end_headers()
 
@@ -564,6 +606,8 @@ if __name__ == '__main__':
     load_json_file(DRINKS_FILE, DEFAULT_DRINKS)
     load_json_file(CUSTOMERS_FILE, DEFAULT_CUSTOMERS)
     load_json_file(REWARDS_FILE, DEFAULT_REWARDS)
+    load_json_file(ADMIN_PASS_FILE, DEFAULT_ADMIN_PASS)
+    load_json_file(PIX_KEY_FILE, DEFAULT_PIX_KEY)
     os.chdir(DATA_DIR)
     
     with socketserver.TCPServer(("", PORT), MeuAcaiRequestHandler) as httpd:
