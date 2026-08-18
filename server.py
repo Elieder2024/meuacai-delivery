@@ -58,8 +58,8 @@ DEFAULT_TOPPINGS = [
 ]
 
 DEFAULT_DRINKS = [
-  { "id": "drk_1", "name": "🥤 Coca-Cola Lata 350ml", "price": 5.00, "icon": "🥤" },
-  { "id": "drk_2", "name": "🍋 Guaraná Antarctica 350ml", "price": 5.00, "icon": "🥤" },
+  { "id": "drk_1", "name": "🥤 Coca-Cola Lata 350ml", "price": 8.00, "icon": "🥤" },
+  { "id": "drk_2", "name": "🍋 Guaraná Antarctica 350ml", "price": 8.00, "icon": "🥤" },
   { "id": "drk_4", "name": "💧 Água Mineral sem Gás 500ml", "price": 3.00, "icon": "💧" }
 ]
 
