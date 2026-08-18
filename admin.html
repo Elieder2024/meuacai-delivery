@@ -464,6 +464,37 @@
               <i class="fa-solid fa-floppy-disk"></i> Salvar Configurações de Horário
             </button>
           </form>
+
+          <!-- CONFIGURAÇÕES DE SENHA DO ADMIN E CHAVE PIX -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+            
+            <!-- ALTERAR SENHA -->
+            <div style="background: #ffffff; padding: 1.25rem; border-radius: 10px; border: 1px solid #cbd5e1;">
+              <h4 style="font-size: 1rem; color: var(--color-dark); margin-bottom: 0.5rem;"><i class="fa-solid fa-key text-purple"></i> Alterar Senha do Admin</h4>
+              <p style="font-size: 0.78rem; color: var(--color-gray); margin-bottom: 1rem;">Digite a nova senha para acessar este painel do proprietário.</p>
+              <form onsubmit="handleSaveAdminPassword(event)">
+                <div class="form-group margin-top-sm">
+                  <label style="font-weight: 700;">Nova Senha do Painel</label>
+                  <input type="password" id="admin-new-password-input" placeholder="Digite a nova senha" required />
+                </div>
+                <button type="submit" class="btn btn-purple btn-sm margin-top-md" style="width: 100%; font-weight: 800;"><i class="fa-solid fa-floppy-disk"></i> Salvar Nova Senha</button>
+              </form>
+            </div>
+
+            <!-- CHAVE PIX DA LOJA -->
+            <div style="background: #ffffff; padding: 1.25rem; border-radius: 10px; border: 1px solid #cbd5e1;">
+              <h4 style="font-size: 1rem; color: var(--color-dark); margin-bottom: 0.5rem;"><i class="fa-solid fa-qrcode text-purple"></i> Configurar Chave PIX da Loja</h4>
+              <p style="font-size: 0.78rem; color: var(--color-gray); margin-bottom: 1rem;">Defina a chave PIX exibida aos clientes no checkout.</p>
+              <form onsubmit="handleSavePixKey(event)">
+                <div class="form-group margin-top-sm">
+                  <label style="font-weight: 700;">Chave PIX da Loja</label>
+                  <input type="text" id="admin-pix-key-input" placeholder="Ex: eliederjogos2023@gmail.com ou CNPJ" required />
+                </div>
+                <button type="submit" class="btn btn-purple btn-sm margin-top-md" style="width: 100%; font-weight: 800;"><i class="fa-solid fa-floppy-disk"></i> Salvar Chave PIX</button>
+              </form>
+            </div>
+
+          </div>
         </div>
       </div>
       <!-- FOOTER DIREITOS AUTORAIS -->
@@ -573,18 +604,77 @@
       }
     }
 
-    function handleAdminPageLogin(e) {
+    async function handleAdminPageLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-owner-email').value.trim().toLowerCase();
       const pass = document.getElementById('login-owner-password').value.trim();
 
-      if (email === OWNER_CREDENTIALS.email && pass === OWNER_CREDENTIALS.password) {
+      let validPass = "123";
+      try {
+        const res = await fetch('/api/admin-pass');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.password) validPass = data.password;
+        }
+      } catch(e) {}
+
+      if ((email === OWNER_CREDENTIALS.email || email === 'dono@nunuacai.com.br') && pass === validPass) {
         sessionStorage.setItem('meuacai_owner_auth', 'true');
-        showToast('Login realizado com sucesso! Bem-vindo ao MeuAçai.', 'success');
+        showToast('Login realizado com sucesso! Bem-vindo ao Nunu Açai.', 'success');
         checkAdminAuth();
       } else {
         showToast('E-mail ou senha incorretos!', 'warning');
       }
+    }
+
+    async function handleSaveAdminPassword(e) {
+      e.preventDefault();
+      const newPass = document.getElementById('admin-new-password-input').value.trim();
+      if (!newPass) return;
+
+      try {
+        const res = await fetch('/api/admin-pass', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: newPass })
+        });
+        if (res.ok) {
+          showToast('✅ Nova Senha do Admin salva com sucesso!', 'success');
+          document.getElementById('admin-new-password-input').value = '';
+        }
+      } catch(e) {
+        showToast('Erro ao salvar nova senha.', 'warning');
+      }
+    }
+
+    async function handleSavePixKey(e) {
+      e.preventDefault();
+      const newKey = document.getElementById('admin-pix-key-input').value.trim();
+      if (!newKey) return;
+
+      try {
+        const res = await fetch('/api/pix-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pixKey: newKey, holder: 'Nunu Açai' })
+        });
+        if (res.ok) {
+          showToast('✅ Chave PIX da loja salva com sucesso!', 'success');
+        }
+      } catch(e) {
+        showToast('Erro ao salvar chave PIX.', 'warning');
+      }
+    }
+
+    async function loadPixKeySetting() {
+      try {
+        const res = await fetch('/api/pix-key');
+        if (res.ok) {
+          const data = await res.json();
+          const pixInput = document.getElementById('admin-pix-key-input');
+          if (pixInput && data && data.pixKey) pixInput.value = data.pixKey;
+        }
+      } catch(e) {}
     }
 
     function fillAdminCredentialsFast() {
@@ -692,6 +782,7 @@
       renderAdminDrinksTable();
       renderAdminLoyaltyTables();
       renderAdminSalesReport();
+      loadPixKeySetting();
     }
 
     function switchAdminPageTab(tab, btn) {
