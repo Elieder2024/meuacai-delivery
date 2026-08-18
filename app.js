@@ -507,7 +507,11 @@ async function confirmPaymentAndSendToKitchen() {
   const selectBairro = document.getElementById('checkout-bairro-bc');
   const bairro = selectBairro ? selectBairro.value : 'Centro';
 
-  const itemsText = state.cart.map(i => `${i.qty}x ${i.title}`).join(' | ');
+  const itemsText = state.cart.map(i => {
+    let itemStr = `${i.qty}x ${i.title}`;
+    if (i.details) itemStr += ` (${i.details})`;
+    return itemStr;
+  }).join('\n | ');
 
   let subtotal = state.cart.reduce((s, i) => s + (i.price * i.qty), 0);
   let fee = 3.00;
