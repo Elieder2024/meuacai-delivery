@@ -477,14 +477,35 @@ function proceedToCheckoutPayment() {
     return;
   }
 
-  const address = document.getElementById('checkout-address-input').value.trim();
+  const nameInput = document.getElementById('checkout-client-name');
+  const phoneInput = document.getElementById('checkout-client-phone');
+  const addressInput = document.getElementById('checkout-address-input');
+
+  const clientName = nameInput ? nameInput.value.trim() : '';
+  const clientPhone = phoneInput ? phoneInput.value.trim() : '';
+  const address = addressInput ? addressInput.value.trim() : '';
+
+  if (!clientName) {
+    showToast('Por favor, informe seu nome para o pedido.', 'warning');
+    if (nameInput) nameInput.focus();
+    return;
+  }
+
+  if (!clientPhone) {
+    showToast('Por favor, informe seu WhatsApp para o pedido.', 'warning');
+    if (phoneInput) phoneInput.focus();
+    return;
+  }
+
   if (!address) {
     showToast('Preencha seu endereço de entrega em Balneário Camboriú.', 'warning');
+    if (addressInput) addressInput.focus();
     return;
   }
 
   const method = document.getElementById('checkout-payment-method').value;
   if (method === 'pix') {
+    setupPixPaymentScreen();
     document.getElementById('cart-step-items').style.display = 'none';
     document.getElementById('cart-step-pix').style.display = 'block';
     document.getElementById('cart-footer-actions').style.display = 'none';
@@ -493,19 +514,69 @@ function proceedToCheckoutPayment() {
   }
 }
 
-function copyPixCode() {
+async function setupPixPaymentScreen() {
+  let pixKey = "eliederjogos2023@gmail.com";
+  try {
+    const res = await fetch('/api/pix-key');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.pixKey) pixKey = data.pixKey;
+    }
+  } catch(e) {}
+
+  const selectBairro = document.getElementById('checkout-bairro-bc');
+  let fee = 3.00;
+  if (selectBairro) {
+    const opt = selectBairro.options[selectBairro.selectedIndex];
+    if (opt) fee = parseFloat(opt.getAttribute('data-fee')) || 3.00;
+  }
+  let subtotal = state.cart.reduce((s, i) => s + (i.price * i.qty), 0);
+  let total = subtotal + fee;
+
+  const pixInput = document.getElementById('pix-copy-input');
+  if (pixInput) pixInput.value = pixKey;
+
+  const qrImg = document.querySelector('#cart-step-pix img');
+  if (qrImg) {
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(pixKey)}`;
+  }
+}
+
+async function copyPixCode() {
   const input = document.getElementById('pix-copy-input');
-  if (input) {
+  if (!input) return;
+  const pixValue = input.value;
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(pixValue);
+    } else {
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+    }
+    showToast('✅ Chave PIX copiada com sucesso! Abra o app do seu banco para pagar.', 'success');
+  } catch (err) {
     input.select();
+    input.setSelectionRange(0, 99999);
     document.execCommand('copy');
-    showToast('Chave PIX copiada com sucesso!', 'success');
+    showToast('✅ Chave PIX copiada!', 'success');
   }
 }
 
 async function confirmPaymentAndSendToKitchen() {
-  const address = document.getElementById('checkout-address-input').value.trim();
+  const nameInput = document.getElementById('checkout-client-name');
+  const phoneInput = document.getElementById('checkout-client-phone');
+  const addressInput = document.getElementById('checkout-address-input');
+
+  const clientName = nameInput && nameInput.value.trim() ? nameInput.value.trim() : (state.currentUser ? state.currentUser.name : 'Cliente Açaí BC');
+  const clientPhone = phoneInput && phoneInput.value.trim() ? phoneInput.value.trim() : (state.currentUser ? state.currentUser.phone : '');
+  const address = addressInput ? addressInput.value.trim() : '';
+
   const selectBairro = document.getElementById('checkout-bairro-bc');
   const bairro = selectBairro ? selectBairro.value : 'Centro';
+  const methodSelect = document.getElementById('checkout-payment-method');
+  const methodVal = methodSelect ? methodSelect.options[methodSelect.selectedIndex].text : 'PIX / Cartão';
 
   const itemsText = state.cart.map(i => {
     let itemStr = `${i.qty}x ${i.title}`;
@@ -521,9 +592,6 @@ async function confirmPaymentAndSendToKitchen() {
   }
   let total = subtotal + fee;
 
-  const clientName = state.currentUser ? state.currentUser.name : 'Cliente Açaí BC';
-  const clientPhone = state.currentUser ? state.currentUser.phone : '';
-
   const newOrder = {
     id: 'ACAI-' + Math.floor(1000 + Math.random() * 9000),
     clientName: clientName,
@@ -531,7 +599,7 @@ async function confirmPaymentAndSendToKitchen() {
     address: `${address}, Bairro: ${bairro} (Balneário Camboriú)`,
     items: itemsText,
     total: total,
-    paymentMethod: 'PIX / Cartão',
+    paymentMethod: methodVal,
     status: 'EM_PREPARO',
     date: 'Hoje, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   };
