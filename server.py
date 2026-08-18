@@ -130,6 +130,12 @@ class MeuAcaiRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         clean_path = self.path.split('?')[0]
 
+        # Prevent browser caching of HTML and JS for instant updates
+        if clean_path.endswith('.html') or clean_path == '/' or clean_path.endswith('.js'):
+            self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
+
         if clean_path in ['/manifest.json', '/manifest.webmanifest']:
             filepath = os.path.join(os.path.dirname(__file__), 'manifest.json')
             if os.path.exists(filepath):
