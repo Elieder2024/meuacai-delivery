@@ -392,6 +392,7 @@
               <tr>
                 <th>Data / Hora</th>
                 <th>Pedido / Cliente</th>
+                <th>Itens do Pedido & Adicionais</th>
                 <th>Pagamento</th>
                 <th>Status</th>
                 <th>Valor Total</th>
@@ -1227,7 +1228,7 @@
       if (!tbody) return;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--color-gray);">Nenhuma venda registrada no período selecionado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray);">Nenhuma venda registrada no período selecionado.</td></tr>`;
         return;
       }
 
@@ -1238,7 +1239,11 @@
             <td><strong>${o.date || 'Hoje'}</strong></td>
             <td>
               <strong style="color: var(--color-primary);">${o.id}</strong><br/>
-              <small>${o.clientName || 'Cliente'}</small>
+              <small style="font-weight: 700; color: var(--color-dark);">${o.clientName || 'Cliente'}</small><br/>
+              <small style="color: var(--color-gray);">${o.clientPhone || ''}</small>
+            </td>
+            <td>
+              <div style="font-size: 0.82rem; max-width: 320px; font-weight: 600; color: #334155; white-space: pre-wrap; max-height: 100px; overflow-y: auto;">${o.items || 'Copo de Açaí'}</div>
             </td>
             <td><span style="font-weight: 700;">${o.paymentMethod || 'PIX'}</span></td>
             <td><span style="font-size: 0.8rem; font-weight: 800; color: #166534;">${o.status}</span></td>
