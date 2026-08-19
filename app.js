@@ -514,6 +514,67 @@ function proceedToCheckoutPayment() {
   }
 }
 
+function formatCleanPixKey(rawKey) {
+  if (!rawKey) return "eliederjogos2023@gmail.com";
+  let str = rawKey.trim();
+  if (str.includes('@')) return str;
+  const digitsOnly = str.replace(/\D/g, '');
+  if (digitsOnly.length >= 10) {
+    return digitsOnly;
+  }
+  return str;
+}
+
+function crc16(str) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++) {
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if ((crc & 0x8000) !== 0) {
+        crc = (crc << 1) ^ 0x1021;
+      } else {
+        crc = (crc << 1);
+      }
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
+function generatePixPayload(key, merchantName, merchantCity, amount, txid = '***') {
+  const cleanKey = formatCleanPixKey(key);
+  const gui = '0014br.gov.bcb.pix';
+  const keyField = '01' + String(cleanKey.length).padStart(2, '0') + cleanKey;
+  const merchantAccountInfo = gui + keyField;
+  
+  const field26 = '26' + String(merchantAccountInfo.length).padStart(2, '0') + merchantAccountInfo;
+  const field00 = '000201';
+  const field01 = '010212';
+  const field52 = '52040000';
+  const field53 = '5303986';
+  
+  let formattedAmount = '';
+  if (amount && parseFloat(amount) > 0) {
+    const amtStr = parseFloat(amount).toFixed(2);
+    formattedAmount = '54' + String(amtStr.length).padStart(2, '0') + amtStr;
+  }
+  
+  const field58 = '5802BR';
+  
+  let nameStr = (merchantName || 'NUNU ACAI').normalize('NFD').replace(/[\u0300-\u036f]/g, '').substring(0, 25).toUpperCase();
+  const field59 = '59' + String(nameStr.length).padStart(2, '0') + nameStr;
+  
+  let cityStr = (merchantCity || 'BALNEARIO CAMBORIU').normalize('NFD').replace(/[\u0300-\u036f]/g, '').substring(0, 15).toUpperCase();
+  const field60 = '60' + String(cityStr.length).padStart(2, '0') + cityStr;
+  
+  const cleanTxid = (txid || '***').replace(/[^a-zA-Z0-9]/g, '').substring(0, 25) || '***';
+  const field62_value = '05' + String(cleanTxid.length).padStart(2, '0') + cleanTxid;
+  const field62 = '62' + String(field62_value.length).padStart(2, '0') + field62_value;
+  
+  const payloadWithoutCRC = field00 + field01 + field26 + field52 + field53 + formattedAmount + field58 + field59 + field60 + field62 + '6304';
+  return payloadWithoutCRC + crc16(payloadWithoutCRC);
+}
+
 async function setupPixPaymentScreen() {
   let pixKey = "eliederjogos2023@gmail.com";
   try {
@@ -533,12 +594,14 @@ async function setupPixPaymentScreen() {
   let subtotal = state.cart.reduce((s, i) => s + (i.price * i.qty), 0);
   let total = subtotal + fee;
 
+  const payload = generatePixPayload(pixKey, 'NUNU ACAI', 'BALNEARIO CAMBORIU', total);
+
   const pixInput = document.getElementById('pix-copy-input');
-  if (pixInput) pixInput.value = pixKey;
+  if (pixInput) pixInput.value = payload;
 
   const qrImg = document.querySelector('#cart-step-pix img');
   if (qrImg) {
-    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(pixKey)}`;
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}`;
   }
 }
 
