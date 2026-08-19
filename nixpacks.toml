@@ -1,5 +1,8 @@
-[providers]
-providers = ['python']
+[variables]
+MISE_PYTHON_AUTHENTICATE_ATTESTATIONS = "false"
+
+[settings]
+python.github_attestations = false
 
 [start]
-cmd = 'python server.py'
+cmd = "python server.py"
