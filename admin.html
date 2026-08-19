@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        for(let r of regs) { r.unregister(); }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(names => { for (let n of names) caches.delete(n); });
+    }
+  </script>
   <title>Nunu Açai - Painel do Dono & Loja</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
