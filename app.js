@@ -762,7 +762,13 @@ function cancelPixPaymentStep() {
   document.getElementById('cart-step-pix').style.display = 'none';
   document.getElementById('cart-step-items').style.display = 'block';
   document.getElementById('cart-footer-actions').style.display = 'flex';
-  showToast('❌ Pedido cancelado antes do envio. Nenhum pedido foi enviado para a loja.', 'info');
+  
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-drawer-overlay');
+  if (drawer) drawer.style.transform = 'translateX(100%)';
+  if (overlay) overlay.classList.remove('active');
+
+  showToast('❌ Pedido cancelado antes do envio.', 'info');
 }
 
         <div style="margin-top: 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
