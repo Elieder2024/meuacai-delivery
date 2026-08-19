@@ -758,7 +758,15 @@ function renderUserOrdersTracker() {
           </div>
         </div>
 
-        <div style="margin-top: 0.75rem; display: flex; justify-content: flex-end;">
+function cancelPixPaymentStep() {
+  document.getElementById('cart-step-pix').style.display = 'none';
+  document.getElementById('cart-step-items').style.display = 'block';
+  document.getElementById('cart-footer-actions').style.display = 'flex';
+  showToast('❌ Pedido cancelado antes do envio. Nenhum pedido foi enviado para a loja.', 'info');
+}
+
+        <div style="margin-top: 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <small style="color: var(--color-gray); font-size: 0.72rem;"><i class="fa-solid fa-lock text-purple"></i> Pedido enviado para a cozinha (não pode mais ser cancelado)</small>
           <button class="btn btn-purple btn-sm" onclick="openOrderReceiptModal('${o.id}')">
             <i class="fa-solid fa-receipt"></i> Ver Cupom / Comprovante
           </button>
