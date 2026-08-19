@@ -56,6 +56,7 @@
     .badge-preparo { background: #fef3c7; color: #92400e; }
     .badge-entrega { background: #dbeafe; color: #1e40af; }
     .badge-entregue { background: #dcfce7; color: #166534; }
+    .badge-cancelado { background: #fee2e2; color: #991b1b; }
   </style>
 </head>
 <body>
@@ -928,6 +929,9 @@
         } else if (o.status === 'ENTREGUE') {
           badgeClass = 'badge-entregue';
           statusLabel = '🎉 Entregue';
+        } else if (o.status === 'CANCELADO') {
+          badgeClass = 'badge-cancelado';
+          statusLabel = '❌ Cancelado';
         }
 
         const priceNum = parseFloat(o.total) || 0;
