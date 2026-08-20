@@ -622,6 +622,25 @@ async function setupPixPaymentScreen() {
   if (qrImg) {
     qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}`;
   }
+
+  // Reset PIX confirmation checkbox & button state
+  const check = document.getElementById('pix-paid-check');
+  if (check) check.checked = false;
+  onPixCheckboxChange();
+}
+
+function onPixCheckboxChange() {
+  const check = document.getElementById('pix-paid-check');
+  const btn = document.getElementById('btn-confirm-pix-order');
+  if (!btn) return;
+
+  if (check && check.checked) {
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  } else {
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'not-allowed';
+  }
 }
 
 async function copyPixCode() {
@@ -644,9 +663,32 @@ async function copyPixCode() {
     document.execCommand('copy');
     showToast('✅ Chave PIX copiada!', 'success');
   }
+
+  // Auto check PIX paid checkbox & enable confirm button
+  const check = document.getElementById('pix-paid-check');
+  if (check) {
+    check.checked = true;
+    onPixCheckboxChange();
+  }
 }
 
 async function confirmPaymentAndSendToKitchen() {
+  const pixStep = document.getElementById('cart-step-pix');
+  const isPixVisible = pixStep && pixStep.style.display !== 'none';
+  const methodSelect = document.getElementById('checkout-payment-method');
+  const isPixMethod = (methodSelect && methodSelect.value === 'pix') || isPixVisible;
+
+  // VERIFICATION: Prevent sending order if PIX is not paid / checked
+  if (isPixMethod) {
+    const check = document.getElementById('pix-paid-check');
+    if (!check || !check.checked) {
+      showToast('⚠️ Por favor, escaneie o QR Code ou clique em "Copiar Chave PIX" e faça o pagamento no aplicativo do seu banco antes de enviar!', 'warning');
+      const input = document.getElementById('pix-copy-input');
+      if (input) input.focus();
+      return;
+    }
+  }
+
   const nameInput = document.getElementById('checkout-client-name');
   const phoneInput = document.getElementById('checkout-client-phone');
   const addressInput = document.getElementById('checkout-address-input');
@@ -657,7 +699,6 @@ async function confirmPaymentAndSendToKitchen() {
 
   const selectBairro = document.getElementById('checkout-bairro-bc');
   const bairro = selectBairro ? selectBairro.value : 'Centro';
-  const methodSelect = document.getElementById('checkout-payment-method');
   const methodVal = methodSelect ? methodSelect.options[methodSelect.selectedIndex].text : 'PIX / Cartão';
 
   const itemsText = state.cart.map(i => {
