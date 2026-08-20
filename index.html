@@ -68,6 +68,10 @@
           <span class="cat-emoji">🍧</span>
           <span>Montar Copos</span>
         </button>
+        <button class="cat-pill" data-cat="copos-prontos" onclick="scrollToSection('sec-copos-prontos', this)">
+          <span class="cat-emoji">🍓</span>
+          <span>Copos Prontos</span>
+        </button>
         <button class="cat-pill" data-cat="bebidas" onclick="scrollToSection('sec-bebidas', this)">
           <span class="cat-emoji">🥤</span>
           <span>Bebidas & Sucos</span>
@@ -81,8 +85,8 @@
       <!-- SECTION 1: ESCOLHA O TAMANHO DO AÇAÍ -->
       <section class="catalog-group" id="sec-copos">
         <div class="group-header">
-          <h3>🍧 1. Escolha o Tamanho do Açaí</h3>
-          <p>Todos acompanham Açaí Puríssimo + Complementos Grátis!</p>
+          <h3>🍧 1. Monte Seu Copo de Açaí</h3>
+          <p>Escolha o tamanho e monte com seus acompanhamentos favoritos!</p>
         </div>
 
         <div class="acai-sizes-grid">
@@ -138,10 +142,134 @@
         </div>
       </section>
 
-      <!-- SECTION 2: BEBIDAS & SUCOS -->
+      <!-- SECTION 2: COPOS PRONTOS (NUNU OFERTAS & KIDS) -->
+      <section class="catalog-group" id="sec-copos-prontos">
+        <div class="group-header">
+          <h3>🍓 2. Copos Prontos (Receitas Especiais Nunu)</h3>
+          <p>Combinações deliciosas pré-montadas para pedir rápido!</p>
+        </div>
+
+        <div class="acai-sizes-grid">
+          
+          <!-- NUNU BANANA 300ML -->
+          <div class="acai-card">
+            <div class="acai-badge">300ml</div>
+            <div class="acai-img">
+              <img src="acai_banana_pronto.jpg" alt="Nunu Banana 300ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Banana (300ml)</h4>
+              <p>Açaí com banana, granola crocante, leite condensado e leite em pó.</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 22,99</span>
+                <button type="button" class="btn-select-acai" onclick="addPredefinedCupToCart('Nunu Banana', '300ml', 22.99, 'Açaí com banana, granola, leite condensado e leite em pó')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NUNU MORANGO 300ML -->
+          <div class="acai-card">
+            <div class="acai-badge">300ml</div>
+            <div class="acai-img">
+              <img src="acai_morango_pronto.jpg" alt="Nunu Morango 300ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Morango (300ml)</h4>
+              <p>Açaí com morango fresco, granola crocante, leite condensado e leite em pó.</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 22,99</span>
+                <button type="button" class="btn-select-acai" onclick="addPredefinedCupToCart('Nunu Morango', '300ml', 22.99, 'Açaí com morango, granola, leite condensado e leite em pó')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NUNU BANANA 500ML -->
+          <div class="acai-card">
+            <div class="acai-badge">500ml</div>
+            <div class="acai-img">
+              <img src="acai_banana_pronto.jpg" alt="Nunu Banana 500ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Banana (500ml)</h4>
+              <p>Açaí caprichado com banana, granola, leite condensado e leite em pó.</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 29,99</span>
+                <button type="button" class="btn-select-acai" onclick="addPredefinedCupToCart('Nunu Banana', '500ml', 29.99, 'Açaí com banana, granola, leite condensado e leite em pó')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NUNU MORANGO 500ML -->
+          <div class="acai-card popular-card">
+            <div class="acai-badge badge-popular">🔥 OFERTA 500ML</div>
+            <div class="acai-img">
+              <img src="acai_morango_pronto.jpg" alt="Nunu Morango 500ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Morango (500ml)</h4>
+              <p>Açaí caprichado com morangos frescos, granola, leite condensado e leite em pó.</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 29,99</span>
+                <button type="button" class="btn-select-acai" onclick="addPredefinedCupToCart('Nunu Morango', '500ml', 29.99, 'Açaí com morango, granola, leite condensado e leite em pó')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NUNU BANANA 700ML -->
+          <div class="acai-card">
+            <div class="acai-badge">700ml</div>
+            <div class="acai-img">
+              <img src="acai_banana_pronto.jpg" alt="Nunu Banana 700ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Banana (700ml)</h4>
+              <p>Copo de 700ml reforçado com banana, granola, leite condensado e leite em pó.</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 35,99</span>
+                <button type="button" class="btn-select-acai" onclick="addPredefinedCupToCart('Nunu Banana', '700ml', 35.99, 'Açaí com banana, granola, leite condensado e leite em pó')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NUNU MORANGO 700ML -->
+          <div class="acai-card">
+            <div class="acai-badge">700ml</div>
+            <div class="acai-img">
+              <img src="acai_morango_pronto.jpg" alt="Nunu Morango 700ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Morango (700ml)</h4>
+              <p>Copo de 700ml reforçado com morangos frescos, granola, leite condensado e leite em pó.</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 35,99</span>
+                <button type="button" class="btn-select-acai" onclick="addPredefinedCupToCart('Nunu Morango', '700ml', 35.99, 'Açaí com morango, granola, leite condensado e leite em pó')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NUNU FELIZ KIDS 300ML -->
+          <div class="acai-card" style="border: 2px solid #ec4899;">
+            <div class="acai-badge" style="background: #ec4899; color: #fff;">NUNU KIDS 🎈</div>
+            <div class="acai-img">
+              <img src="acai_kids_pronto.jpg" alt="Nunu Feliz Kids 300ml" />
+            </div>
+            <div class="acai-details">
+              <h4>Nunu Feliz (300ml)</h4>
+              <p>Açaí com banana, morango, leite condensado, leite em pó e Confeitos de Chocolate Coloridos!</p>
+              <div class="acai-price-row">
+                <span class="acai-price">R$ 25,99</span>
+                <button type="button" class="btn-select-acai" style="background: #ec4899;" onclick="addPredefinedCupToCart('Nunu Feliz', '300ml (Kids)', 25.99, 'Açaí com banana, morango, leite condensado, leite em pó e Confeitos de Chocolate Coloridos')"><i class="fa-solid fa-cart-plus"></i> Pedir</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 3: BEBIDAS & SUCOS -->
       <section class="catalog-group" id="sec-bebidas">
         <div class="group-header">
-          <h3>🥤 2. Bebidas & Sucos Naturais</h3>
+          <h3>🥤 3. Bebidas & Sucos Naturais</h3>
           <p>Para acompanhar o seu açaí geladinho</p>
         </div>
 
@@ -509,7 +637,7 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- JavaScript -->
-  <script src="app.js?v=4.0"></script>
+  <script src="app.js?v=5.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
