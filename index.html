@@ -542,8 +542,8 @@
       <!-- Step 2: PIX Confirmation -->
       <div id="cart-step-pix" style="display: none;">
         <div style="text-align: center; background: #faf5ff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: var(--radius-md);">
-          <div style="font-size: 0.8rem; font-weight: 900; color: var(--color-primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-qrcode"></i> CHAVE PIX - MEUAÇAI</div>
-          <p style="font-size: 0.8rem; color: var(--color-gray);">Escaneie o QR Code abaixo ou copie a chave para pagar no seu banco:</p>
+          <div style="font-size: 0.85rem; font-weight: 900; color: var(--color-primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-qrcode"></i> CHAVE PIX - MEUAÇAI</div>
+          <p style="font-size: 0.8rem; color: var(--color-gray);">Escaneie o QR Code abaixo ou clique em Copiar Chave para pagar no app do seu banco:</p>
           
           <div style="margin: 1rem 0;">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126580014br.gov.bcb.pix0136meuacai-bc-santa-catarina-pix" alt="QR Code PIX MeuAçai" style="border-radius: 12px; border: 1px solid #ddd;" />
@@ -551,11 +551,18 @@
 
           <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
             <input type="text" readonly id="pix-copy-input" value="00020126580014br.gov.bcb.pix0136meuacai-pix-chave-99120" style="flex: 1; font-size: 0.75rem;" />
-            <button class="btn btn-secondary" onclick="copyPixCode()"><i class="fa-solid fa-copy"></i> Copiar</button>
+            <button class="btn btn-purple" style="padding: 0.5rem 1rem;" onclick="copyPixCode()"><i class="fa-solid fa-copy"></i> Copiar Chave PIX</button>
           </div>
 
-          <button class="btn btn-purple btn-full margin-top-md" onclick="confirmPaymentAndSendToKitchen()">
-            <i class="fa-solid fa-check-circle"></i> Enviar Pedido para a Loja!
+          <div style="background: #f3e8ff; border: 1px solid #c084fc; border-radius: 10px; padding: 0.75rem; margin-top: 1rem; text-align: left;">
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; cursor: pointer; color: #4c1d95; font-weight: 700; margin: 0;">
+              <input type="checkbox" id="pix-paid-check" onchange="onPixCheckboxChange()" style="width: 20px; height: 20px; accent-color: var(--color-primary); cursor: pointer;" />
+              <span>Já fiz o pagamento do PIX no aplicativo do meu banco</span>
+            </label>
+          </div>
+
+          <button id="btn-confirm-pix-order" class="btn btn-purple btn-full margin-top-md" onclick="confirmPaymentAndSendToKitchen()" style="opacity: 0.5; cursor: not-allowed;">
+            <i class="fa-solid fa-check-circle"></i> Confirmar Pagamento PIX e Enviar Pedido!
           </button>
 
           <button type="button" class="btn btn-secondary btn-full margin-top-sm" onclick="cancelPixPaymentStep()">
