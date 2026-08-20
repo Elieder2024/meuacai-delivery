@@ -433,6 +433,25 @@ function clearCart() {
   updateCartUI();
 }
 
+function addPredefinedCupToCart(name, sizeLabel, price, details) {
+  if (!checkStoreOpenOrShowModal()) return;
+  
+  const title = `${name} (${sizeLabel})`;
+  const existingIdx = state.cart.findIndex(i => i.title === title && i.details === details);
+  if (existingIdx > -1) {
+    state.cart[existingIdx].qty++;
+  } else {
+    state.cart.push({
+      title: title,
+      details: details,
+      price: price,
+      qty: 1
+    });
+  }
+  updateCartUI();
+  showToast(`✅ ${title} adicionado ao carrinho!`, 'success');
+}
+
 function updateDeliveryFeeBC() {
   const selectBairro = document.getElementById('checkout-bairro-bc');
   let fee = 3.00;
